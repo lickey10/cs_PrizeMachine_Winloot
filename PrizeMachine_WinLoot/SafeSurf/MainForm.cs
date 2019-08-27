@@ -533,7 +533,7 @@ namespace SCTV
                         refreshUtilities.Cancel();
                         lblRefreshTimer.Text = "0 seconds";
 
-                        if (!loggingIn) //logBackIn)
+                        if (!loggingIn || logBackIn)
                         {
                             foreach (string user in users)
                             {
