@@ -195,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="XQu\getChannels.xqu" />
+    <Content Include="dlls\Interop.SpeechLib.dll" />
+    <Content Include="dlls\libvlc.dll" />
+    <Content Include="dlls\Microsoft.Xml.XQuery.dll" />
     <Content Include="libvlc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

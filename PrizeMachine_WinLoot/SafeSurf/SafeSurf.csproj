@@ -305,17 +305,13 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj">
+    <ProjectReference Include="..\..\..\PrizeMachine_RefreshUtilities\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj">
       <Project>{3c105e9a-6ed6-4404-9d19-c31d0c5da563}</Project>
       <Name>RefreshUtilities</Name>
     </ProjectReference>
     <ProjectReference Include="Objects\SCTVObjects.csproj">
       <Project>{0f15be7d-d1be-4ea8-a57a-f9fa41ab4a4d}</Project>
       <Name>SCTVObjects</Name>
-    </ProjectReference>
-    <ProjectReference Include="SCTVControls\SCTVControls.csproj">
-      <Project>{4548fb10-c90b-4eed-92b6-202cae443f3b}</Project>
-      <Name>SCTVControls</Name>
     </ProjectReference>
     <ProjectReference Include="TabCtrl\TabCtrl.csproj">
       <Project>{12e470d6-9b68-4226-ae77-667636b28026}</Project>

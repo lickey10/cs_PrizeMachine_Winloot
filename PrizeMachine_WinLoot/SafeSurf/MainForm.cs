@@ -184,21 +184,6 @@ namespace SCTV
             try
             {
                 useLatestIE();
-                
-                //keepRunning_tour_Timer.Enabled = true;
-                //keepRunning_tour_Timer.Interval = 30000;//30 seconds
-                //keepRunning_tour_Timer.Tick += KeepRunning_tour_Timer_Tick;
-                //keepRunning_tour_Timer.Stop();
-
-                documentLoaded_tour_Timer.Enabled = true;
-                documentLoaded_tour_Timer.Interval = 10000;
-                documentLoaded_tour_Timer.Tick += DocumentLoaded_tour_Timer_Tick;
-                documentLoaded_tour_Timer.Stop();
-
-                documentLoaded_tourList_Timer.Enabled = true;
-                documentLoaded_tourList_Timer.Interval = 10000;
-                documentLoaded_tourList_Timer.Tick += DocumentLoaded_tourList_Timer_Tick;
-                documentLoaded_tourList_Timer.Stop();
 
                 tabControlEx.Name = "tabControlEx";
                 tabControlEx.SelectedIndex = 0;
@@ -227,19 +212,6 @@ namespace SCTV
                 users.Add("lickey10@gmail.com|soccer");
                 users.Add("lickeykids@gmail.com|soccer");
 
-                ////load blocked terms
-                //loadBlockedTerms(blockedTermsPath);
-
-                ////load blocked sites
-                //loadBlockedSites(blockedSitesPath);
-
-                ////load found blocked terms
-                //loadFoundBlockedTerms(foundBlockedTermsPath);
-
-                ////load found blocked sites
-                //loadFoundBlockedSites(foundBlockedSitesPath);
-
-
                 //getDefaultBrowser();
                 
             }
@@ -249,130 +221,6 @@ namespace SCTV
                 //Application.Restart();
             }
         }
-
-        private void StartTourTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!tourIsRunning && startTourUrlString.Trim().Length > 0)
-                {
-                    if (startTourUrlString.Length > 5)
-                    {
-                        tourIsRunning = true;
-                        tourList.RemoveAt(0);
-                        //tourBrowser.Url = new Uri(startTourUrlString);
-                    }
-                    
-                    startTourUrlString = "";
-                    documentLoaded_tour_Timer.Stop();
-                    documentLoaded_tour_Timer.Tag = null;
-
-                    lblRefreshTimer.Text = "0 seconds";
-                }
-            }
-            catch (Exception ex)
-            {
-                //Tools.WriteToFile(ex);
-
-                //Application.Restart();
-            }
-        }
-
-        private void DocumentLoaded_tourList_Timer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                //documentLoaded_tourList_Timer.Stop();
-                //documentLoaded_tourList_Timer.Tag = null;
-
-                //bitVideoBrowser.Navigate("javascript: window.external.CallServerSideCode();");
-            }
-            catch (Exception ex)
-            {
-                //Application.Restart();
-            }
-        }
-
-        private void DocumentLoaded_tour_Timer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                documentLoaded_tour_Timer.Stop();
-                documentLoaded_tour_Timer.Tag = null;
-
-                //if (tourBrowser != null && goToURLTimer.Tag == null)
-                //{
-                //    tourBrowser.Navigate("javascript: window.external.CallServerSideCode();");
-
-                //    keepRunning_tour_Timer.Stop();
-                //    keepRunning_tour_Timer.Tag = DateTime.Now;
-                //    keepRunning_tour_Timer.Start();
-                //}
-            }
-            catch (Exception ex)
-            {
-                //Application.Restart();
-                string error = ex.Message;
-            }            
-        }
-        
-        //private void KeepRunning_tour_Timer_Tick(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (tourIsRunning)
-        //        {
-        //            keepRunningTimerTicks++;
-
-        //            if (keepRunningTimerTicks >= 1)//30 seconds
-        //            {
-        //                //goToURLTimer.Stop();
-        //                //goToURLTimer.Tag = null;
-        //                documentLoaded_tourList_Timer.Stop();
-        //                documentLoaded_tourList_Timer.Tag = null;
-        //                documentLoaded_tour_Timer.Stop();
-        //                documentLoaded_tour_Timer.Tag = null;
-        //                //secondsTimer.Tag = null;
-                        
-        //                string currentPageString = tourBrowser.Url.ToString().Substring(0,tourBrowser.Url.ToString().Length - 1);
-        //                currentPageString = currentPageString.Substring(currentPageString.LastIndexOf("/") + 1);
-        //                int.TryParse(currentPageString, out nextPageNumber);
-        //                nextPageNumber++;//add one to the current page number
-
-        //                if (keepRunningTimerTicks < 3)
-        //                {
-        //                    string nextPageLink = tourBrowser.Url.ToString().Replace("/" + (nextPageNumber - 1).ToString() + "/", "/" + nextPageNumber + "/");
-
-        //                    //if(nextPageLink != tourBrowser.Url.ToString())
-        //                    //    goToURL(nextPageLink);
-        //                }
-        //                else
-        //                {
-        //                    tourBrowser.Refresh();
-        //                    keepRunningTimerTicks = 0;
-        //                }
-
-        //                    //Application.Restart();
-        //                    //tourBrowser.Refresh();//refresh page to get things going again
-        //                    //keepRunning_tour_Timer.Stop();
-
-        //                }
-        //            //else if (keepRunningTimerTicks >= 7)//7 minutes
-        //            //    Application.Restart();
-        //        }
-        //        else
-        //        {
-        //            keepRunning_tour_Timer.Stop();
-        //            keepRunningTimerTicks = 0;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Tools.WriteToFile(ex);
-
-        //        Application.Restart();
-        //    }
-        //}
 
         // Starting the app here...
         private void MainForm_Load(object sender, EventArgs e)
@@ -484,21 +332,6 @@ namespace SCTV
             //}
         }
 
-        //private void TourBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        //{
-        //    lblDownloading.BackColor = Color.Green;
-        //}
-
-        //private void TourBrowser_DownloadComplete(object sender, EventArgs e)
-        //{
-        //    lblStreaming.BackColor = Color.Red;
-        //}
-
-        //private void TourBrowser_Downloading(object sender, EventArgs e)
-        //{
-        //    lblStreaming.BackColor = Color.Green;
-        //}
-
         private void Window_Error(object sender, HtmlElementErrorEventArgs e)
         {
             //Application.Restart();
@@ -535,8 +368,8 @@ namespace SCTV
                         refreshUtilities.Cancel();
                         lblRefreshTimer.Text = "0 seconds";
 
-                        if (logBackIn)
-                        {
+                        //if (logBackIn)
+                        //{
                             foreach (string user in users)
                             {
                                 if (userLoggingOut != user)
@@ -546,7 +379,7 @@ namespace SCTV
                                     break;
                                 }
                             }
-                        }
+                        //}
                     }
                     else if (bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/sweepstake") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/5k_sweepstakes"))
                     {
@@ -598,6 +431,10 @@ namespace SCTV
 
                             findNextContestLink(bitVideoBrowser.DocumentText);
                         }
+                    }
+                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && documentString.ToLower().Contains("login") && currentUser.Length == 0) //click switch users
+                    {
+                        refreshUtilities.ClickButton(btnSwitchUsers, 10, false, lblRefreshTimer);
                     }
                 }
             }
@@ -1894,10 +1731,5 @@ namespace SCTV
             //    }
             //}
         }
-
-        //private void btnCheckForButton_Click(object sender, EventArgs e)
-        //{
-        //    tourBrowser.Navigate("javascript: window.external.CallServerSideCode();");
-        //}
     }
 }
