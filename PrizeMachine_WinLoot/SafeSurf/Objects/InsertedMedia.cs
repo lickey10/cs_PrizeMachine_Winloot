@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -22,17 +17,17 @@ namespace SCTVObjects
 
         public InsertedMedia()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         public DriveInfo Drive
         {
             get { return drive; }
-            set 
-            { 
+            set
+            {
                 drive = value;
 
-                if(mediaName.Trim().Length == 0)
+                if (mediaName.Trim().Length == 0)
                     MediaName = drive.VolumeLabel;
             }
         }
@@ -40,8 +35,8 @@ namespace SCTVObjects
         public string MediaName
         {
             get { return mediaName; }
-            set 
-            { 
+            set
+            {
                 mediaName = value;
 
                 //discName = discName.Replace("<", "");
@@ -57,7 +52,7 @@ namespace SCTVObjects
 
         public MediaStateEnum MediaState
         {
-            get{return mediaState;}
+            get { return mediaState; }
         }
 
         public bool SkipMenu

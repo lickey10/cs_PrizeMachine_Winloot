@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using SpeechLib;
+using System;
 
 namespace SCTV
 {
@@ -42,7 +40,7 @@ namespace SCTV
             catch (Exception ex)
             {
                 System.Diagnostics.EventLog.WriteEntry("Phrase", ex.Message);
-            }            
+            }
         }
 
         /// <summary>

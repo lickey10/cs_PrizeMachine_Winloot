@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using System.Diagnostics;
 using SCTVObjects;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SCTV
 {
@@ -143,6 +138,6 @@ namespace SCTV
             inactivityTicker = 0;
         }
 
-        
+
     }
 }

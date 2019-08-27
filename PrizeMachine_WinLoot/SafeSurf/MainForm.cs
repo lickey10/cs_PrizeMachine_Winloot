@@ -1,17 +1,15 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RefreshUtilities;
+using SCTVObjects;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.Collections;
-using Microsoft.Win32;
-using SCTVObjects;
-using System.Runtime.InteropServices;
-using RefreshUtilities;
-using System.Linq;
 
 namespace SCTV
 {
@@ -145,7 +143,7 @@ namespace SCTV
 
         public bool ShowVolumeControl
         {
-            set 
+            set
             {
                 showVolumeControl = value;
                 //volumeControl.Visible = value; 
@@ -176,7 +174,7 @@ namespace SCTV
                 //documentLoaded_tourList(value);
             }
         }
-        
+
         public MainForm()
         {
             InitializeComponent();
@@ -184,7 +182,7 @@ namespace SCTV
             try
             {
                 useLatestIE();
-                
+
                 //keepRunning_tour_Timer.Enabled = true;
                 //keepRunning_tour_Timer.Interval = 30000;//30 seconds
                 //keepRunning_tour_Timer.Tick += KeepRunning_tour_Timer_Tick;
@@ -216,7 +214,7 @@ namespace SCTV
                 //_windowManager.ActiveBrowser.Navigating += ActiveBrowser_Navigating;
                 //_windowManager.ActiveBrowser.ScriptErrorsSuppressed = true;
                 _windowManager.ShowAddressBar = showAddressBar;
-                
+
                 showAddressBarToolStripMenuItem.Checked = showAddressBar;
 
                 startTime = DateTime.Now;
@@ -241,7 +239,7 @@ namespace SCTV
 
 
                 //getDefaultBrowser();
-                
+
             }
             catch (Exception ex)
             {
@@ -262,7 +260,7 @@ namespace SCTV
                         tourList.RemoveAt(0);
                         //tourBrowser.Url = new Uri(startTourUrlString);
                     }
-                    
+
                     startTourUrlString = "";
                     documentLoaded_tour_Timer.Stop();
                     documentLoaded_tour_Timer.Tag = null;
@@ -313,9 +311,9 @@ namespace SCTV
             {
                 //Application.Restart();
                 string error = ex.Message;
-            }            
+            }
         }
-        
+
         //private void KeepRunning_tour_Timer_Tick(object sender, EventArgs e)
         //{
         //    try
@@ -333,7 +331,7 @@ namespace SCTV
         //                documentLoaded_tour_Timer.Stop();
         //                documentLoaded_tour_Timer.Tag = null;
         //                //secondsTimer.Tag = null;
-                        
+
         //                string currentPageString = tourBrowser.Url.ToString().Substring(0,tourBrowser.Url.ToString().Length - 1);
         //                currentPageString = currentPageString.Substring(currentPageString.LastIndexOf("/") + 1);
         //                int.TryParse(currentPageString, out nextPageNumber);
@@ -389,7 +387,7 @@ namespace SCTV
                 bitVideoBrowser = this._windowManager.New();
                 bitVideoBrowser.DocumentCompleted += MainBrowser_DocumentCompleted;
                 bitVideoBrowser.Url = new Uri("http://www.winloot.com/Sweepstake");
-                
+
                 //bitVideoBrowser.StartNewWindow += BitVideoBrowser_StartNewWindow;
 
                 try
@@ -410,7 +408,7 @@ namespace SCTV
             {
                 Tools.WriteToFile(ex);
                 //Application.Restart();
-            }            
+            }
         }
 
         private void RefreshUtilities_GoToUrlComplete(object sender, EventArgs e)
@@ -428,7 +426,7 @@ namespace SCTV
 
         private void RefreshUtilities_CallMethodComplete(object sender, EventArgs e)
         {
-            if(((TimerInfo)sender).MethodToCall == "javascript:useFavorites()")
+            if (((TimerInfo)sender).MethodToCall == "javascript:useFavorites()")
             {
                 findSubmit(bitVideoBrowser.Document);
             }
@@ -437,7 +435,7 @@ namespace SCTV
         private void RefreshUtilities_ClickComplete(object sender, EventArgs e)
         {
             //if the sender is the quick pick button then find and click the submit button
-            
+
             if (((HtmlElement)sender).GetAttribute("value") == "QUICK PICKS" || ((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png")
                 || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
                 || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()")//this is the quick pick button - now click the submit button
@@ -503,7 +501,7 @@ namespace SCTV
         {
             //Application.Restart();
         }
-        
+
         private void ActiveBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             //documentString = "";
@@ -530,12 +528,12 @@ namespace SCTV
                         else
                             refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
                     }
-                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
+                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
                     {
                         refreshUtilities.Cancel();
                         lblRefreshTimer.Text = "0 seconds";
 
-                        if (logBackIn)
+                        if (!loggingIn) //logBackIn)
                         {
                             foreach (string user in users)
                             {
@@ -607,7 +605,7 @@ namespace SCTV
                 //Application.Restart();
             }
         }
-        
+
         private bool findQuickPick(HtmlDocument pageDocument)
         {
             if (!foundQuickPick)
@@ -661,7 +659,7 @@ namespace SCTV
                         return true;
                     }
                 }
-                
+
                 elc = pageDocument.GetElementsByTagName("input");
 
                 foreach (HtmlElement el in elc)
@@ -830,7 +828,7 @@ namespace SCTV
 
 
             refreshUtilities.GoToURL("https://www.winloot.com", true, lblRefreshTimer, bitVideoBrowser);
-            
+
             foundSkip = true;
 
             return foundSkip;
@@ -841,12 +839,12 @@ namespace SCTV
             string tempUser = "";
             string tempPassword = "";
 
-            foreach(string user in users)
+            foreach (string user in users)
             {
                 tempUser = user.Split('|')[0];
                 tempPassword = user.Split('|')[1];
 
-                if(bitVideoBrowser.DocumentText.ToLower().Contains(tempUser.ToLower()))
+                if (bitVideoBrowser.DocumentText.ToLower().Contains(tempUser.ToLower()))
                 {
                     return tempUser;
                 }
@@ -1017,7 +1015,7 @@ namespace SCTV
                 //'if not, Set Emulation to highest level possible on the user machine
                 string Root = "HKEY_CURRENT_USER\\";
                 string Key = "Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION";
-                
+
                 object CurrentSetting = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Key).GetValue(AppName + ".exe");
 
                 if (CurrentSetting == null || int.Parse(CurrentSetting.ToString()) != VersionCode)
@@ -1028,7 +1026,7 @@ namespace SCTV
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "useLatestIE error: "+ ex.Message + Environment.NewLine + ex.StackTrace);
+                Tools.WriteToFile(Tools.errorFile, "useLatestIE error: " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -1588,7 +1586,7 @@ namespace SCTV
             RegistryKey key = null;
             try
             {
-                key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command",true);
+                key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", true);
 
                 //trim off quotes
                 //browser = key.GetValue(null).ToString().Replace("\"", "");
@@ -1599,10 +1597,10 @@ namespace SCTV
                 //}
 
                 browser = key.GetValue(null).ToString();
-                
+
                 //key.SetValue(null, (string)@browser);
 
-                string safeSurfBrowser = "\""+ Application.ExecutablePath +"\"";
+                string safeSurfBrowser = "\"" + Application.ExecutablePath + "\"";
 
                 key.SetValue(null, (string)@safeSurfBrowser);
             }

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
+using System.Data;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -15,12 +11,12 @@ namespace SCTVObjects
         ArrayList mediaToEdit = new ArrayList();
         bool readOnly = false;
         MediaHandler myMedia = new MediaHandler();
-        
+
         public ArrayList MediaToEdit
         {
             set
             {
-                mediaToEdit = value; 
+                mediaToEdit = value;
             }
 
             get
@@ -44,8 +40,8 @@ namespace SCTVObjects
 
         public bool AutoUpdate
         {
-            set 
-            { 
+            set
+            {
                 //if(value)
                 //    btnAutoUpdate_Click(btnAutoUpdate, null); 
             }
@@ -63,7 +59,7 @@ namespace SCTVObjects
         public MediaDetailsMultiple(ArrayList mediaArray, DataView availableCategories, ArrayList availableMediaCategories)
         {
             InitializeComponent();
-            
+
             this.Refresh();
 
             MediaToEdit = mediaArray;
@@ -74,7 +70,7 @@ namespace SCTVObjects
         public MediaDetailsMultiple(ArrayList mediaArray)
         {
             InitializeComponent();
-            
+
             this.Refresh();
 
             MediaToEdit = mediaArray;
@@ -242,7 +238,7 @@ namespace SCTVObjects
                     txtTrivia.Text = media.Trivia;
                     txtPerformers.Text = media.Performers;
                 }
-                
+
                 //enable/disable controls
                 txtDirectorResult.ReadOnly = readOnly;
                 txtImdbNumResult.ReadOnly = readOnly;
@@ -443,7 +439,7 @@ namespace SCTVObjects
             //    else
             //    {
             //        IMDBScraper imdb = new IMDBScraper();
-                    
+
             //        //search by title
             //        foundMedia = imdb.getInfoByTitle(textToSearch, false, "");
             //    }
@@ -501,7 +497,7 @@ namespace SCTVObjects
 
             DialogResult result = addItem.ShowDialog(this);
 
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
                 lbCurrentGenres.Items.Add(addItem.ItemToAdd);
         }
 
@@ -513,14 +509,14 @@ namespace SCTVObjects
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtCoverImage.Text = "";
-            thumbnailPictureBox.ImageLocation = Application.StartupPath +"//images//media//coverimages//notavailable.jpg";
+            thumbnailPictureBox.ImageLocation = Application.StartupPath + "//images//media//coverimages//notavailable.jpg";
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Cover Image";
-            fdlg.InitialDirectory = Application.StartupPath +"//images//media//coverimages//";
+            fdlg.InitialDirectory = Application.StartupPath + "//images//media//coverimages//";
             fdlg.Filter = "All files (*.*)|*.*|All files (*.*)|*.*";
             //fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
@@ -562,11 +558,11 @@ namespace SCTVObjects
 
             foreach (string item in lbFiles.Items)
             {
-                if(itemCounter == itemIndex)//this is the new home of our selected item
+                if (itemCounter == itemIndex)//this is the new home of our selected item
                 {
                     itemArray.Add(lbFiles.SelectedItem);
                 }
-                else if(itemCounter == lbFiles.SelectedIndex)
+                else if (itemCounter == lbFiles.SelectedIndex)
                 {
                     itemArray.Add(lbFiles.Items[itemIndex]);
                 }
@@ -578,7 +574,7 @@ namespace SCTVObjects
 
             lbFiles.Items.Clear();
 
-            foreach(string item in itemArray)
+            foreach (string item in itemArray)
                 lbFiles.Items.Add(item);
 
             lbFiles.SelectedIndex = itemIndex;

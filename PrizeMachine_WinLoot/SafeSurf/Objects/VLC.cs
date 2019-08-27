@@ -6,19 +6,10 @@
 //
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using System.Threading;
 using System.Reflection;
-using Microsoft.Win32;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 
 namespace SCTVObjects
@@ -269,7 +260,7 @@ namespace SCTVObjects
                 //Desired audio quality(-1 to 10). 
 
                 //check for required folders
-                if(!Directory.Exists(vlcInstallDirectory + @"\plugins"))
+                if (!Directory.Exists(vlcInstallDirectory + @"\plugins"))
                     MessageBox.Show("Required folder \"plugins\" is missing");
                 else if (!Directory.Exists(vlcInstallDirectory + @"\snapshots"))
                     MessageBox.Show("Required folder \"snapshots\" is missing");
@@ -359,9 +350,9 @@ namespace SCTVObjects
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception("Could not find libvlc. ERROR:"+ ex.Message);
+                throw new Exception("Could not find libvlc. ERROR:" + ex.Message);
             }
         }
 

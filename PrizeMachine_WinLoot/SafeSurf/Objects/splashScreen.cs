@@ -1,25 +1,24 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace SCTV
 {
-	/// <summary>
-	/// Summary description for splashScreen.
-	/// </summary>
-	public class splashScreen : System.Windows.Forms.Form
+    /// <summary>
+    /// Summary description for splashScreen.
+    /// </summary>
+    public class splashScreen : System.Windows.Forms.Form
     {
         private IContainer components;
-		private System.Windows.Forms.Label lblSCTV;
-		private System.Windows.Forms.Label lblLoading;
-		protected Rectangle WorkAreaRectangle;
-		public string splashContent1="";
+        private System.Windows.Forms.Label lblSCTV;
+        private System.Windows.Forms.Label lblLoading;
+        protected Rectangle WorkAreaRectangle;
+        public string splashContent1 = "";
         private ProgressBar pbLoading;
         private Timer loadingTimer;
-        public string splashContent2="";
+        public string splashContent2 = "";
 
         public string SplashMessage1
         {
@@ -33,16 +32,16 @@ namespace SCTV
             set { lblLoading.Text = value; }
         }
 
-		public splashScreen()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public splashScreen()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
             loadingTimer.Enabled = true;
             loadingTimer.Start();
-		}
+        }
 
         public splashScreen(Media MediaInfoToShow)
         {
@@ -73,28 +72,28 @@ namespace SCTV
                 pbLoading.Visible = false;
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             this.lblSCTV = new System.Windows.Forms.Label();
             this.lblLoading = new System.Windows.Forms.Label();
@@ -164,41 +163,41 @@ namespace SCTV
             this.VisibleChanged += new System.EventHandler(this.splashScreen_VisibleChanged);
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void splashScreen_VisibleChanged(object sender, System.EventArgs e)
-		{
-			if(this.Visible)
-			{
+        private void splashScreen_VisibleChanged(object sender, System.EventArgs e)
+        {
+            if (this.Visible)
+            {
                 Cursor.Position = new Point(this.Width, Cursor.Position.Y);
                 //Cursor.Hide();
                 lblSCTV.Refresh();
                 lblLoading.Refresh();
                 this.Focus();
                 this.BringToFront();
-			}
-			else
-			{
-				Cursor.Show();
-			}
-		}
+            }
+            else
+            {
+                Cursor.Show();
+            }
+        }
 
-		private void splashScreen_Load(object sender, System.EventArgs e)
-		{
+        private void splashScreen_Load(object sender, System.EventArgs e)
+        {
             //if(splashContent.Length>0)
             //{
             //    lblSCTV.Text = splashContent;
             //}
 
-			WorkAreaRectangle = Screen.GetWorkingArea(WorkAreaRectangle);
-			lblSCTV.Top = (WorkAreaRectangle.Height-175)/2;
-			lblSCTV.Left = (WorkAreaRectangle.Width-lblSCTV.Width)/2;
-			lblSCTV.Refresh();
-			lblLoading.Top = (lblSCTV.Top + lblSCTV.Height + 10);
-			lblLoading.Left = (WorkAreaRectangle.Width-lblLoading.Width)/2;
-			lblLoading.Refresh();
-		}
+            WorkAreaRectangle = Screen.GetWorkingArea(WorkAreaRectangle);
+            lblSCTV.Top = (WorkAreaRectangle.Height - 175) / 2;
+            lblSCTV.Left = (WorkAreaRectangle.Width - lblSCTV.Width) / 2;
+            lblSCTV.Refresh();
+            lblLoading.Top = (lblSCTV.Top + lblSCTV.Height + 10);
+            lblLoading.Left = (WorkAreaRectangle.Width - lblLoading.Width) / 2;
+            lblLoading.Refresh();
+        }
 
         private void loadingTimer_Tick(object sender, EventArgs e)
         {
@@ -214,18 +213,18 @@ namespace SCTV
 
             Rectangle rectTL = new Rectangle(0, 0, e.ClipRectangle.Width / 2, e.ClipRectangle.Height / 2);
             bgBrush = new LinearGradientBrush(rectTL, Color.AntiqueWhite, Color.SteelBlue, LinearGradientMode.ForwardDiagonal);
-            fillRectangle(rectTL,e, bgBrush);
+            fillRectangle(rectTL, e, bgBrush);
 
             Rectangle rectTR = new Rectangle(e.ClipRectangle.Width / 2, 0, e.ClipRectangle.Width / 2, e.ClipRectangle.Height / 2);
             bgBrush = new LinearGradientBrush(rectTR, Color.AntiqueWhite, Color.SteelBlue, LinearGradientMode.BackwardDiagonal);
             fillRectangle(rectTR, e, bgBrush);
 
             Rectangle rectBL = new Rectangle(0, e.ClipRectangle.Height / 2, e.ClipRectangle.Width / 2, e.ClipRectangle.Height / 2);
-            bgBrush = new LinearGradientBrush(rectBL, Color.SteelBlue,  Color.AntiqueWhite,LinearGradientMode.BackwardDiagonal);
+            bgBrush = new LinearGradientBrush(rectBL, Color.SteelBlue, Color.AntiqueWhite, LinearGradientMode.BackwardDiagonal);
             fillRectangle(rectBL, e, bgBrush);
 
             Rectangle rectBR = new Rectangle(e.ClipRectangle.Width / 2, e.ClipRectangle.Height / 2, e.ClipRectangle.Width / 2, e.ClipRectangle.Height / 2);
-            bgBrush = new LinearGradientBrush(rectBR, Color.SteelBlue,Color.AntiqueWhite,  LinearGradientMode.ForwardDiagonal);
+            bgBrush = new LinearGradientBrush(rectBR, Color.SteelBlue, Color.AntiqueWhite, LinearGradientMode.ForwardDiagonal);
             fillRectangle(rectBR, e, bgBrush);
         }
 
@@ -237,5 +236,5 @@ namespace SCTV
                     e.Graphics.FillRectangle(bgBrush, rectToDraw);
             }
         }
-	}
+    }
 }

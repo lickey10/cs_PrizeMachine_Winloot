@@ -1,13 +1,10 @@
 using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Threading;
-using System.Diagnostics;
-using Microsoft.Win32;
-using SCTVObjects;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -219,12 +216,12 @@ namespace SCTVObjects
                 //if (width > 0 && height > 0)
                 //{
                 //    m_rProgress = new Rectangle(x, y, width, height);
-                    //pnlStatus.Invalidate(m_rProgress);
-                    //int iSecondsLeft = 1 + (int)(TIMER_INTERVAL * ((1.0 - m_dblLastCompletionFraction) / m_dblPBIncrementPerTimerInterval)) / 1000;
-                    //if (iSecondsLeft == 1)
-                    //    lblTimeRemaining.Text = string.Format("1 second remaining");
-                    //else
-                    //    lblTimeRemaining.Text = string.Format("{0} seconds remaining", iSecondsLeft);
+                //pnlStatus.Invalidate(m_rProgress);
+                //int iSecondsLeft = 1 + (int)(TIMER_INTERVAL * ((1.0 - m_dblLastCompletionFraction) / m_dblPBIncrementPerTimerInterval)) / 1000;
+                //if (iSecondsLeft == 1)
+                //    lblTimeRemaining.Text = string.Format("1 second remaining");
+                //else
+                //    lblTimeRemaining.Text = string.Format("{0} seconds remaining", iSecondsLeft);
 
                 //}
             }
@@ -367,8 +364,8 @@ namespace SCTVObjects
             {
                 Tools.WriteToFile(ex);
             }
-        
-         }
+
+        }
 
         private void lblLoading_Paint(object sender, PaintEventArgs e)
         {
@@ -379,6 +376,6 @@ namespace SCTVObjects
             e.Graphics.DrawString("Loading", fonts.CustomFont("CoffeeTin Initials", 32), b, 0, 0, StringFormat.GenericTypographic);
 
             b.Dispose();
-        }   
+        }
     }
 }

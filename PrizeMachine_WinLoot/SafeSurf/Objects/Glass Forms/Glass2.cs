@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace SCTVObjects
@@ -66,8 +62,8 @@ namespace SCTVObjects
 
         public double GlassOpacity
         {
-            set 
-            { 
+            set
+            {
                 glassOpacity = value;
 
                 this.Opacity = glassOpacity;
@@ -106,7 +102,7 @@ namespace SCTVObjects
 
                 this.Opacity = glassOpacity;
                 this.TransparencyKey = System.Drawing.SystemColors.Control;
-                
+
                 //ch = new ControlHolder();
                 //ch.DisplayClose = this.displayClose;
                 //ch.DisplayMaximize = this.displayMaximize;
@@ -120,7 +116,7 @@ namespace SCTVObjects
 
                 if (activeArea == null || activeArea.Width == 0 || activeArea.Height == 0)
                     activeArea = parentForm.DesktopBounds;
-                    //activeArea = new Rectangle(20, 20, this.Width - 40, this.Height - 40);
+                //activeArea = new Rectangle(20, 20, this.Width - 40, this.Height - 40);
 
                 //updateOtherFormPositions();
 
@@ -128,7 +124,7 @@ namespace SCTVObjects
 
                 parentForm.FormClosing += new FormClosingEventHandler(parentForm_FormClosing);
                 parentForm.Activated += new EventHandler(parentForm_Activated);
-                
+
                 if (keepWindowVisible)
                     keepWindowOnScreen();
             }
@@ -262,7 +258,7 @@ namespace SCTVObjects
 
         private void Glass2_Activated(object sender, EventArgs e)
         {
-            if(!thisFormActivated)
+            if (!thisFormActivated)
                 updateOtherFormPositions();
 
             thisFormActivated = true;

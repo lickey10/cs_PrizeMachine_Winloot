@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
-using System;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -35,5 +34,5 @@ using System;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 // Require FullTrust permission
-[assembly: PermissionSet(SecurityAction.RequestMinimum, Name="FullTrust")]
+[assembly: PermissionSet(SecurityAction.RequestMinimum, Name = "FullTrust")]
 [assembly: CLSCompliant(true)]

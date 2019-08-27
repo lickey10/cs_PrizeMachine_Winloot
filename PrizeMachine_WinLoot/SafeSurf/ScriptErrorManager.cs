@@ -1,63 +1,61 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SCTV
 {
-  class ScriptErrorManager
-  {
-    private ScriptErrorManager()
+    class ScriptErrorManager
     {
-      _scriptErrors = new NotifyCollection<ScriptError>();
-    }
-
-    private NotifyCollection<ScriptError> _scriptErrors;
-
-    private static object lockObject = new object();
-    private static ScriptErrorManager _instance;
-
-    public static ScriptErrorManager Instance
-    {
-      get
-      {
-        if (_instance == null)
+        private ScriptErrorManager()
         {
-          lock (lockObject)
-          {
-            if (_instance == null)
-              _instance = new ScriptErrorManager();
-          }
+            _scriptErrors = new NotifyCollection<ScriptError>();
         }
-        return _instance;
-      }
-    }
 
-    public NotifyCollection<ScriptError> ScriptErrors
-    {
-      get
-      {
-        return _scriptErrors;
-      }
-    }
+        private NotifyCollection<ScriptError> _scriptErrors;
 
-    private ScriptErrorWindow _errorWindow;
+        private static object lockObject = new object();
+        private static ScriptErrorManager _instance;
 
-    public void RegisterScriptError(Uri url, string description, int lineNumber)
-    {
-      this._scriptErrors.Add(new ScriptError(url, description, lineNumber));
-      if (SettingsHelper.Current.ShowScriptErrors)
-      {
-        ShowWindow();
-      }
-    }
+        public static ScriptErrorManager Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (lockObject)
+                    {
+                        if (_instance == null)
+                            _instance = new ScriptErrorManager();
+                    }
+                }
+                return _instance;
+            }
+        }
 
-    public void ShowWindow()
-    {
-      if (_errorWindow == null || _errorWindow.IsDisposed)
-      {
-        _errorWindow = new ScriptErrorWindow();
-      }
-      _errorWindow.Show();
+        public NotifyCollection<ScriptError> ScriptErrors
+        {
+            get
+            {
+                return _scriptErrors;
+            }
+        }
+
+        private ScriptErrorWindow _errorWindow;
+
+        public void RegisterScriptError(Uri url, string description, int lineNumber)
+        {
+            this._scriptErrors.Add(new ScriptError(url, description, lineNumber));
+            if (SettingsHelper.Current.ShowScriptErrors)
+            {
+                ShowWindow();
+            }
+        }
+
+        public void ShowWindow()
+        {
+            if (_errorWindow == null || _errorWindow.IsDisposed)
+            {
+                _errorWindow = new ScriptErrorWindow();
+            }
+            _errorWindow.Show();
+        }
     }
-  }
 }

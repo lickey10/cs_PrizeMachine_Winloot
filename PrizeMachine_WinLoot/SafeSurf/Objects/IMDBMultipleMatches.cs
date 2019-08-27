@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -86,7 +81,7 @@ namespace SCTVObjects
         private void selectMedia()
         {
             Cursor = Cursors.WaitCursor;
-            
+
             if (lvMatches.SelectedItems.Count > 0)
             {
                 if (lvMatches.SelectedItems[0].Tag == null)//no results

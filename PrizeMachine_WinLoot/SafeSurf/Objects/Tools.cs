@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace SCTVObjects
@@ -21,12 +19,12 @@ namespace SCTVObjects
             try
             {
                 //create the directory for the file
-                if (!Directory.Exists(fileToWrite.Substring(0,fileToWrite.LastIndexOf("\\"))))
+                if (!Directory.Exists(fileToWrite.Substring(0, fileToWrite.LastIndexOf("\\"))))
                     Directory.CreateDirectory(fileToWrite.Substring(0, fileToWrite.LastIndexOf("\\")));
 
                 //append data to file
                 using (StreamWriter file = new StreamWriter(fileToWrite, true))
-                    file.WriteLine(DateTime.Now.ToShortDateString() +" "+ DateTime.Now.ToShortTimeString() +" : "+ value);
+                    file.WriteLine(DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " : " + value);
             }
             catch (Exception ex)
             {

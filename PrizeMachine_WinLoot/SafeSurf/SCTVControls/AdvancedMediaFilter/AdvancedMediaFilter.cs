@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using System.Collections;
-using System.Globalization;
 using SCTVObjects;
+using System;
+using System.Collections;
+using System.Data;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SCTV.AdvancedMediaFilter
 {

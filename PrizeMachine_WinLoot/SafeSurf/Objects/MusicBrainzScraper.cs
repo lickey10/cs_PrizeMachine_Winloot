@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using System.Web;
 using System.Collections;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
 using System.Windows.Forms;
-using System.Configuration;
-using System.Xml;
 
 namespace SCTVObjects
 {
@@ -297,11 +292,11 @@ namespace SCTVObjects
                     string tempStatus = "";
                     string tempStatusGoal = "official";
                     string tempAlbum = "";
-                    
+
                     tempTitle = findValue(recording, "<title>", "</title>");
                     tempArtist = findValue(recording, "<name>", "</name>");
 
-                    if(MediaHandler.FormatNameString(tempTitle).ToLower() == media.Title.ToLower() && (tempArtist.ToLower() == media.Artist.ToLower() || media.Artist.Length == 0))
+                    if (MediaHandler.FormatNameString(tempTitle).ToLower() == media.Title.ToLower() && (tempArtist.ToLower() == media.Artist.ToLower() || media.Artist.Length == 0))
                     {
                         //iterate the releases for this recording
                         foreach (string release in recording.Split(new string[] { "<release id=" }, StringSplitOptions.RemoveEmptyEntries))
@@ -326,18 +321,18 @@ namespace SCTVObjects
                                     string tempGenres = "";
                                     string tempString = "";
 
-                                    foreach(string genre in recording.Split(new string[] { "<tag count=\""}, StringSplitOptions.RemoveEmptyEntries))
+                                    foreach (string genre in recording.Split(new string[] { "<tag count=\"" }, StringSplitOptions.RemoveEmptyEntries))
                                     {
                                         tempString = MediaHandler.FormatNameString(findValue(genre, "<name>", "</name>"));
 
                                         if (tempString != media.Artist)
                                         {
                                             if (tempGenres.Trim().Length > 0)
-                                                tempString = "|"+ tempString;
+                                                tempString = "|" + tempString;
 
                                             tempGenres += tempString;
                                         }
-                                        
+
                                     }
 
                                     media.category = tempGenres;
@@ -375,7 +370,7 @@ namespace SCTVObjects
         //{
         //    try
         //    {
-                
+
         //        //download the whole page, to be able to search it by regex
         //        string URL = imdbTitleSearchURL + HttpUtility.UrlEncode(title);
         //        StreamReader sr = new StreamReader(new WebClient().OpenRead(URL));
@@ -566,7 +561,7 @@ namespace SCTVObjects
                 string tempImage = "";
                 string tempImage2 = "";
 
-                string URL = musicBrainzSearchUrl + "/release/"+ media.ReleaseID;
+                string URL = musicBrainzSearchUrl + "/release/" + media.ReleaseID;
 
                 WebClient webClient = new WebClient();
                 webClient.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
@@ -580,7 +575,7 @@ namespace SCTVObjects
                 {
                     tempImage2 = findValue(stringToSearch, "<span class=\"cover-art-image\"", "</span>");
 
-                    tempImage = findValue(tempImage2, "data-large-thumbnail=\"//","\"");
+                    tempImage = findValue(tempImage2, "data-large-thumbnail=\"//", "\"");
 
                     if (tempImage.Trim().Length == 0)
                         tempImage = findValue(tempImage2, "data-small-thumbnail=\"//", "\"");
@@ -589,7 +584,7 @@ namespace SCTVObjects
                 imageURL = tempImage;
 
                 photoPath = imageURL.Substring(imageURL.LastIndexOf("/") + 1);
-                
+
                 photoPath = System.Windows.Forms.Application.StartupPath + "\\images\\media\\coverImages\\" + photoPath;
 
                 if (!File.Exists(photoPath) && imageURL.Trim().Length > 0)
@@ -598,9 +593,9 @@ namespace SCTVObjects
                         imageURL = "http://" + imageURL;
 
                     System.Drawing.Image posterImage = System.Drawing.Image.FromStream(new WebClient().OpenRead(imageURL));
-                    
+
                     SaveJpeg(photoPath, posterImage, 100);
-                    
+
                     //_thumbnail = posterImage;
                 }
 
@@ -810,7 +805,7 @@ namespace SCTVObjects
 
                 foreach (Match match in R1.Matches(content))
                 {
-                    title = match.Value.Substring(0,match.Value.IndexOf("</a>"));
+                    title = match.Value.Substring(0, match.Value.IndexOf("</a>"));
 
                     if (title.Contains("     "))
                         title = title.Substring(0, title.IndexOf("     "));
@@ -833,7 +828,7 @@ namespace SCTVObjects
                 }
 
                 //now look for exact title matches
-                if(exactTitleMatch !=null)
+                if (exactTitleMatch != null)
                     titlePattern = exactTitleMatch;
                 else
                     titlePattern = "title_exact.*?<p";
@@ -880,7 +875,7 @@ namespace SCTVObjects
                 //if (partialTitleMatch != null)
                 //    titlePattern = partialTitleMatch;
                 //else
-                    titlePattern = "title_approx.*?<div";
+                titlePattern = "title_approx.*?<div";
 
                 R1 = new Regex(titlePattern,
                     RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
@@ -960,7 +955,7 @@ namespace SCTVObjects
 
                 director = findValue(content, "<h4 class=\"inline\">Director:</h4>", "</div>").Trim();
 
-                if(director.Length == 0)
+                if (director.Length == 0)
                     director = findValue(content, "<h4 class=\"inline\">Directors:</h4>", "</div>").Trim();
             }
             catch (Exception ex)
@@ -1084,7 +1079,7 @@ namespace SCTVObjects
                         //    startString = "       >";
 
                         //genre += findValue(value, startString, "</a>");
-                        
+
                         genre += value.Trim();
                     }
                 }
@@ -1133,7 +1128,7 @@ namespace SCTVObjects
                 tagline = findValue(content, "Taglines:</h4>", "<", false);
 
                 //string tagLine = tempTagline.Split(new char[] { '>', '<' })[2];
-                tagline = tagline.Replace("\n","").Trim();
+                tagline = tagline.Replace("\n", "").Trim();
 
                 //if (taglineMatch != null)
                 //    taglinePattern = taglineMatch;
@@ -1180,7 +1175,7 @@ namespace SCTVObjects
         private string getDescription(string content)
         {
             string description = "";
-            
+
             try
             {
                 description = findValue(content, "<h2>Storyline</h2>", "</p>");
@@ -1188,7 +1183,7 @@ namespace SCTVObjects
 
                 if (tempDescription.Trim().Length == 0)
                     tempDescription = findValue(description, " ", "<");
-                
+
                 description = tempDescription.Trim();
             }
             catch (Exception ex)
@@ -1251,7 +1246,7 @@ namespace SCTVObjects
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "getTrivia() error: "+ ex.Message);
+                Tools.WriteToFile(Tools.errorFile, "getTrivia() error: " + ex.Message);
             }
 
             return htmlCodes.ToText(trivia);
@@ -1308,7 +1303,7 @@ namespace SCTVObjects
                 //string ratingDescriptionPattern = "<span itemprop=\"contentRating\">.*</span>";
                 ratingDescription = findValue(content, "<span itemprop=\"contentRating\">Rated ", "</span>", false);
 
-                if(ratingDescription.IndexOf(" for") > 0)
+                if (ratingDescription.IndexOf(" for") > 0)
                     ratingDescription = ratingDescription.Substring(ratingDescription.IndexOf(" for ") + 5);
 
                 //if (ratingDescriptionMatch != null)
@@ -1405,7 +1400,7 @@ namespace SCTVObjects
         /// <param name="path">Path to which the image would be saved.</param> 
         // <param name="quality">An integer from 0 to 100, with 100 being the 
         /// highest quality</param> 
-        public static void SaveJpeg(string path, System.Drawing.Image img, int quality) 
+        public static void SaveJpeg(string path, System.Drawing.Image img, int quality)
         {
             try
             {
@@ -1434,12 +1429,12 @@ namespace SCTVObjects
             {
                 Tools.WriteToFile(ex);
             }
-        } 
+        }
 
         /// <summary> 
         /// Returns the image codec with the given mime type 
         /// </summary> 
-        private static ImageCodecInfo GetEncoderInfo(string mimeType) 
+        private static ImageCodecInfo GetEncoderInfo(string mimeType)
         {
             try
             {
@@ -1456,7 +1451,7 @@ namespace SCTVObjects
                 Tools.WriteToFile(ex);
             }
 
-            return null; 
+            return null;
         }
 
         private string findValue(string stringToParse, string startPattern, string endPattern)
