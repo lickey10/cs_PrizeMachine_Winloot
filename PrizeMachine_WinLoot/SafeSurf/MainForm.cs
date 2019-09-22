@@ -4,6 +4,7 @@ using SCTVObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace SCTV
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1301:AvoidDuplicateAccelerators")]
     public partial class MainForm : Form
     {
+        SettingsHelper helper = SettingsHelper.Current;
         private bool loggedIn = false;
         public static string[] blockedTerms;
         public static string[] foundBlockedTerms;
@@ -26,6 +28,8 @@ namespace SCTV
         public static string blockedSitesPath = "config\\BlockedSites.txt";
         public static string foundBlockedSitesPath = "config\\foundBlockedSites.txt";
         public static string loginInfoPath = "config\\LoginInfo.txt";
+        public static string statusLogPath = ConfigurationManager.AppSettings["StatusLogPath"]; //"config\\Status_"+ DateTime.Now.ToLongDateString() +"_"+ DateTime.Now.ToLongTimeString() +".txt";
+        public static string finishedLogPath = ConfigurationManager.AppSettings["finishedLogPath"];
         public bool adminLock = false;//locks down browser until unlocked by a parent
         public int loggedInTime = 0;
         public bool checkForms = true;
@@ -181,22 +185,12 @@ namespace SCTV
 
             try
             {
+                if(!statusLogPath.Contains("."))
+                    statusLogPath += "Status_"+ DateTime.Now.ToShortDateString().Replace("/","") +"_"+ DateTime.Now.ToShortTimeString().Replace(":","") +".txt";
+
+                statusLogPath = statusLogPath.Replace(" ", "");
+
                 useLatestIE();
-
-                //keepRunning_tour_Timer.Enabled = true;
-                //keepRunning_tour_Timer.Interval = 30000;//30 seconds
-                //keepRunning_tour_Timer.Tick += KeepRunning_tour_Timer_Tick;
-                //keepRunning_tour_Timer.Stop();
-
-                documentLoaded_tour_Timer.Enabled = true;
-                documentLoaded_tour_Timer.Interval = 10000;
-                documentLoaded_tour_Timer.Tick += DocumentLoaded_tour_Timer_Tick;
-                documentLoaded_tour_Timer.Stop();
-
-                documentLoaded_tourList_Timer.Enabled = true;
-                documentLoaded_tourList_Timer.Interval = 10000;
-                documentLoaded_tourList_Timer.Tick += DocumentLoaded_tourList_Timer_Tick;
-                documentLoaded_tourList_Timer.Stop();
 
                 tabControlEx.Name = "tabControlEx";
                 tabControlEx.SelectedIndex = 0;
@@ -225,19 +219,6 @@ namespace SCTV
                 users.Add("lickey10@gmail.com|soccer");
                 users.Add("lickeykids@gmail.com|soccer");
 
-                ////load blocked terms
-                //loadBlockedTerms(blockedTermsPath);
-
-                ////load blocked sites
-                //loadBlockedSites(blockedSitesPath);
-
-                ////load found blocked terms
-                //loadFoundBlockedTerms(foundBlockedTermsPath);
-
-                ////load found blocked sites
-                //loadFoundBlockedSites(foundBlockedSitesPath);
-
-
                 //getDefaultBrowser();
 
             }
@@ -247,130 +228,6 @@ namespace SCTV
                 //Application.Restart();
             }
         }
-
-        private void StartTourTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!tourIsRunning && startTourUrlString.Trim().Length > 0)
-                {
-                    if (startTourUrlString.Length > 5)
-                    {
-                        tourIsRunning = true;
-                        tourList.RemoveAt(0);
-                        //tourBrowser.Url = new Uri(startTourUrlString);
-                    }
-
-                    startTourUrlString = "";
-                    documentLoaded_tour_Timer.Stop();
-                    documentLoaded_tour_Timer.Tag = null;
-
-                    lblRefreshTimer.Text = "0 seconds";
-                }
-            }
-            catch (Exception ex)
-            {
-                //Tools.WriteToFile(ex);
-
-                //Application.Restart();
-            }
-        }
-
-        private void DocumentLoaded_tourList_Timer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                //documentLoaded_tourList_Timer.Stop();
-                //documentLoaded_tourList_Timer.Tag = null;
-
-                //bitVideoBrowser.Navigate("javascript: window.external.CallServerSideCode();");
-            }
-            catch (Exception ex)
-            {
-                //Application.Restart();
-            }
-        }
-
-        private void DocumentLoaded_tour_Timer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                documentLoaded_tour_Timer.Stop();
-                documentLoaded_tour_Timer.Tag = null;
-
-                //if (tourBrowser != null && goToURLTimer.Tag == null)
-                //{
-                //    tourBrowser.Navigate("javascript: window.external.CallServerSideCode();");
-
-                //    keepRunning_tour_Timer.Stop();
-                //    keepRunning_tour_Timer.Tag = DateTime.Now;
-                //    keepRunning_tour_Timer.Start();
-                //}
-            }
-            catch (Exception ex)
-            {
-                //Application.Restart();
-                string error = ex.Message;
-            }
-        }
-
-        //private void KeepRunning_tour_Timer_Tick(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (tourIsRunning)
-        //        {
-        //            keepRunningTimerTicks++;
-
-        //            if (keepRunningTimerTicks >= 1)//30 seconds
-        //            {
-        //                //goToURLTimer.Stop();
-        //                //goToURLTimer.Tag = null;
-        //                documentLoaded_tourList_Timer.Stop();
-        //                documentLoaded_tourList_Timer.Tag = null;
-        //                documentLoaded_tour_Timer.Stop();
-        //                documentLoaded_tour_Timer.Tag = null;
-        //                //secondsTimer.Tag = null;
-
-        //                string currentPageString = tourBrowser.Url.ToString().Substring(0,tourBrowser.Url.ToString().Length - 1);
-        //                currentPageString = currentPageString.Substring(currentPageString.LastIndexOf("/") + 1);
-        //                int.TryParse(currentPageString, out nextPageNumber);
-        //                nextPageNumber++;//add one to the current page number
-
-        //                if (keepRunningTimerTicks < 3)
-        //                {
-        //                    string nextPageLink = tourBrowser.Url.ToString().Replace("/" + (nextPageNumber - 1).ToString() + "/", "/" + nextPageNumber + "/");
-
-        //                    //if(nextPageLink != tourBrowser.Url.ToString())
-        //                    //    goToURL(nextPageLink);
-        //                }
-        //                else
-        //                {
-        //                    tourBrowser.Refresh();
-        //                    keepRunningTimerTicks = 0;
-        //                }
-
-        //                    //Application.Restart();
-        //                    //tourBrowser.Refresh();//refresh page to get things going again
-        //                    //keepRunning_tour_Timer.Stop();
-
-        //                }
-        //            //else if (keepRunningTimerTicks >= 7)//7 minutes
-        //            //    Application.Restart();
-        //        }
-        //        else
-        //        {
-        //            keepRunning_tour_Timer.Stop();
-        //            keepRunningTimerTicks = 0;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Tools.WriteToFile(ex);
-
-        //        Application.Restart();
-        //    }
-        //}
 
         // Starting the app here...
         private void MainForm_Load(object sender, EventArgs e)
@@ -523,12 +380,12 @@ namespace SCTV
                         foundQuickPick = false;
                         foundOffsiteURL = true;
 
-                        if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
-                            findSkipAndContinue();
-                        else
+                        //if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
+                        //    findSkipAndContinue();
+                        //else
                             refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
                     }
-                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
+                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
                     {
                         refreshUtilities.Cancel();
                         lblRefreshTimer.Text = "0 seconds";
@@ -597,6 +454,8 @@ namespace SCTV
                             findNextContestLink(bitVideoBrowser.DocumentText);
                         }
                     }
+                    else
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", 20, false, lblRefreshTimer, bitVideoBrowser);
                 }
             }
             catch (Exception ex)
@@ -746,6 +605,8 @@ namespace SCTV
                     numberOfPrizesEntered++;
                     txtPrizeCount.Text = numberOfPrizesEntered.ToString();
 
+                    log(statusLogPath, currentUser +" - Entered another contest " + numberOfPrizesEntered.ToString());
+
                     return true;
                 }
 
@@ -764,6 +625,8 @@ namespace SCTV
                     refreshCount = 0;
                     numberOfPrizesEntered++;
                     txtPrizeCount.Text = numberOfPrizesEntered.ToString();
+
+                    log(statusLogPath, currentUser + " - Entered another contest " + numberOfPrizesEntered.ToString());
 
                     return true;
                 }
@@ -860,6 +723,8 @@ namespace SCTV
             bool foundEmail = false;
             bool foundPassword = false;
             HtmlElement txtPassword = null;
+
+            log(statusLogPath, "Logging In "+ username);
 
             HtmlElementCollection elc = bitVideoBrowser.Document.GetElementsByTagName("input");
 
@@ -958,14 +823,14 @@ namespace SCTV
 
         private void logout()
         {
+            log(statusLogPath, "Logging Out "+ currentUser);
+
             currentUser = "";
             refreshUtilities.GoToURL("https://www.winloot.com/Home/Logout", 1, lblRefreshTimer, bitVideoBrowser);
         }
 
         private void initFormsConfigs()
         {
-            SettingsHelper helper = SettingsHelper.Current;
-
             checkForms = helper.CheckForms;
         }
 
@@ -1535,6 +1400,9 @@ namespace SCTV
 
         public void log(string path, string content)
         {
+            //make sure the path exists
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             logHeader(path);
 
             File.AppendAllText(path, content);
@@ -1542,10 +1410,12 @@ namespace SCTV
 
         public void log(string path, string[] content)
         {
+            //make sure the path exists
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             logHeader(path);
 
             File.WriteAllLines(path, content);
-            //File.WriteAllText(path, content);
         }
 
         private void tcAdmin_VisibleChanged(object sender, EventArgs e)
@@ -1874,6 +1744,10 @@ namespace SCTV
             {
                 currentUser = "";
                 MessageBox.Show("All Done!!");
+
+                log(statusLogPath, "******** All Done!! *******");
+
+                log(finishedLogPath += "FINISHED_" + DateTime.Now.ToShortDateString().Replace("/", "") + "_" + DateTime.Now.ToShortTimeString().Replace(":", "") + ".txt", "******** All Done!! *******");
             }
 
             //}
