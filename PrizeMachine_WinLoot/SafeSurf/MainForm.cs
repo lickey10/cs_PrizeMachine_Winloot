@@ -292,27 +292,33 @@ namespace SCTV
         private void RefreshUtilities_ClickComplete(object sender, EventArgs e)
         {
             //if the sender is the quick pick button then find and click the submit button
-
-            if (((HtmlElement)sender).GetAttribute("value") == "QUICK PICKS" || ((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png")
-                || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
-                || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()")//this is the quick pick button - now click the submit button
+            try
             {
-                if (!findSubmit(bitVideoBrowser.Document))
-                    refreshUtilities.CallMethod("javascript:useFavorites()", true, lblRefreshTimer);
-            }
+                if (!bitVideoBrowser.Document.Url.ToString().Contains("www.winloot.com/Sweepstake/ShowSubmit/") && (((HtmlElement)sender).GetAttribute("value") == "QUICK PICKS" || ((HtmlElement)sender).GetAttribute("value") == "USE QUICK PICKS" || ((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png")
+                                || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
+                                || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()"))//this is the quick pick button - now click the submit button
+                {
+                    findSubmit(bitVideoBrowser.Document);
+                        //refreshUtilities.CallMethod("javascript:useFavorites()", true, lblRefreshTimer);
+                }
 
-            if (((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
-            {
-                if (!findSkipAndContinue())
+                if (((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
+                {
+                    if (!findSkipAndContinue())
+                    {
+                        foundQuickPick = false;
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                    }
+                }
+                else if (!loggingIn)
                 {
                     foundQuickPick = false;
-                    refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                    refreshUtilities.GoToURL("http://www.winloot.com/", 19, lblRefreshTimer, bitVideoBrowser);
                 }
             }
-            else if (!loggingIn)
+            catch (Exception ex)
             {
-                foundQuickPick = false;
-                refreshUtilities.GoToURL("http://www.winloot.com/", 19, lblRefreshTimer, bitVideoBrowser);
+                string error = ex.Message;
             }
         }
 
@@ -383,7 +389,7 @@ namespace SCTV
                         //if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
                         //    findSkipAndContinue();
                         //else
-                            refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
                     }
                     else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
                     {
@@ -408,7 +414,18 @@ namespace SCTV
                         foundOffsiteURL = false;
                         loggingIn = false;
 
-                        if (!foundQuickPick)
+                        if (bitVideoBrowser.Document.Url.ToString().ToLower().Contains("www.winloot.com/sweepstake/showsubmit/"))
+                        {
+                            if (!foundSubmit || previousPageURL != bitVideoBrowser.Document.Url.ToString())
+                            {
+                                refreshUtilities.Cancel();
+
+                                previousPageURL = bitVideoBrowser.Document.Url.ToString();
+
+                                foundSubmit = findSubmit(bitVideoBrowser.Document);
+                            }
+                        }
+                        else if (!foundQuickPick)
                         {
                             if (!findQuickPick(bitVideoBrowser.Document))
                             {
@@ -523,7 +540,7 @@ namespace SCTV
 
                 foreach (HtmlElement el in elc)
                 {
-                    if (el.GetAttribute("value") == "QUICK PICKS")
+                    if (el.GetAttribute("value") == "QUICK PICKS" || el.GetAttribute("value") == "USE QUICK PICKS")
                     {
                         refreshUtilities.ClickElement(el, true, lblRefreshTimer);
                         foundQuickPick = true;
