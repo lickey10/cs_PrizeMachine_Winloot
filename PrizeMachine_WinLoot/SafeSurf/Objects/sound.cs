@@ -73,34 +73,34 @@ namespace SCTV
                                         int uMxId,
                                         int dwCallback,
                                         int dwInstance,
-                                        int fdwOpen );
+                                        int fdwOpen);
 
         [DllImport("winmm.dll", CharSet = CharSet.Ansi)]                                                    // mixerClose
-        private static extern int mixerClose( int hmx );
+        private static extern int mixerClose(int hmx);
 
         [DllImport("winmm.dll", CharSet = CharSet.Ansi)]                                                    // mixerGetControlDetailsA
         private static extern int mixerGetControlDetailsA(
                                             int hmxobj,
                                             ref MIXERCONTROLDETAILS pmxcd,
-                                            int fdwDetails );
+                                            int fdwDetails);
 
         [DllImport("winmm.dll", CharSet = CharSet.Ansi)]                                                    // mixerGetLineControlsA
         private static extern int mixerGetLineControlsA(
                                             int hmxobj,
                                             ref MIXERLINECONTROLS pmxlc,
-                                            int fdwControls );
+                                            int fdwControls);
 
         [DllImport("winmm.dll", CharSet = CharSet.Ansi)]                                                    // mixerGetLineInfoA
         private static extern int mixerGetLineInfoA(
                                             int hmxobj,
                                             ref MIXERLINE pmxl,
-                                            int fdwInfo );
+                                            int fdwInfo);
 
         [DllImport("winmm.dll", CharSet = CharSet.Ansi)]                                                    // mixerSetControlDetails
         private static extern int mixerSetControlDetails(
                                             int hmxobj,
                                             ref MIXERCONTROLDETAILS pmxcd,
-                                            int fdwDetails );
+                                            int fdwDetails);
 
         // -----------------------------------------------------------------------
 
@@ -272,7 +272,7 @@ namespace SCTV
             //    }
             //}
         }
-        
+
         /// <summary>
         /// handles all volume controls
         /// </summary>
@@ -348,7 +348,7 @@ namespace SCTV
                     if (x == 0)
                         returnPercentage = 0;
                     else
-                        returnPercentage = (int)Math.Round((double)((decimal)x / (decimal)(volSteps.Length-1))*100, MidpointRounding.ToEven);
+                        returnPercentage = (int)Math.Round((double)((decimal)x / (decimal)(volSteps.Length - 1)) * 100, MidpointRounding.ToEven);
 
                     if (returnPercentage > 100)
                         returnPercentage = 100;
@@ -392,7 +392,7 @@ namespace SCTV
                                         int component,
                                         int control,
                                         out MIXERCONTROL mxc,
-                                        out int vCurrentVol )
+                                        out int vCurrentVol)
         {
             bool retValue = false;
             mxc = new MIXERCONTROL();
@@ -474,7 +474,7 @@ namespace SCTV
         private static bool SetVolumeControl(                                                               // SetVolumeControl
                                     int hmixer,
                                     MIXERCONTROL mxc,
-                                    int volume )
+                                    int volume)
         {
             bool retValue = false;
             int rc;
@@ -509,7 +509,7 @@ namespace SCTV
             return retValue = MMSYSERR_NOERROR == rc ? true : false;
         }
 
-        private static int getVolume( int control, int component )                                             // GetVolume
+        private static int getVolume(int control, int component)                                             // GetVolume
         {
             int hmixer = 0;
             int currVol = -1;
@@ -535,7 +535,7 @@ namespace SCTV
             return currVol;
         }
 
-        public static void SetVolume( int control, int component, int newVol )                              // SetVolume
+        public static void SetVolume(int control, int component, int newVol)                              // SetVolume
         {
             int hmixer = 0;
             int currentVol;
@@ -561,7 +561,7 @@ namespace SCTV
             mixerClose(hmixer);
         }
 
-        public static bool MonitorControl( int iw )     // iw is the window handle                          // MonitorControl
+        public static bool MonitorControl(int iw)     // iw is the window handle                          // MonitorControl
         {
             int rc = -1;
             bool retValue = false;
@@ -595,7 +595,7 @@ namespace SCTV
             return retValue = (MMSYSERR_NOERROR == rc1) && (MMSYSERR_NOERROR == rc2) ? MMSYSERR_NOERROR : retValue;
         }
 
-        public static int GetControlID( int component, int control )                                        // GetControlID
+        public static int GetControlID(int component, int control)                                        // GetControlID
         {
             MIXERCONTROL mxc = new MIXERCONTROL();
             int _i;         // Though we won't need _i, it still must be declared                                    

@@ -1,13 +1,9 @@
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
+using System.Drawing;
 using System.Threading;
-using System.Diagnostics;
+using System.Windows.Forms;
 //using Microsoft.Win32;
-using SCTVObjects;
 
 namespace SCTVObjects
 {

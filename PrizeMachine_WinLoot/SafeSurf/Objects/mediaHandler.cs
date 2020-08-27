@@ -1,44 +1,40 @@
-using System;
-using System.Data;
-using System.Text;
-using System.Xml;
-using System.IO;
 using Microsoft.Xml.XQuery;
+using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Reflection;
 using System.Configuration;
+using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace SCTVObjects
 {
-	/// <summary>
-	/// Summary description for mediaHandler.
-	/// </summary>
-	public class MediaHandler
-	{
-		#region "Delegates"
-		public delegate void mediaListChanged();
-		public event mediaListChanged OnListChanged;
-		#endregion
+    /// <summary>
+    /// Summary description for mediaHandler.
+    /// </summary>
+    public class MediaHandler
+    {
+        #region "Delegates"
+        public delegate void mediaListChanged();
+        public event mediaListChanged OnListChanged;
+        #endregion
 
-		#region variables
-		public static DataSet dsMedia = new DataSet();
+        #region variables
+        public static DataSet dsMedia = new DataSet();
         public static DataSet dsGames = new DataSet();
         public static DataSet dsGameCategories = new DataSet();
         public static DataSet dsGameRatings = new DataSet();
         public static DataSet dsGamesToCategories = new DataSet();
         public DataSet dsImages = new DataSet();
-		public DataSet dsFileTypes = new DataSet();
+        public DataSet dsFileTypes = new DataSet();
         public static DataSet dsMediaTypes = new DataSet();
-		public string currentCategory="";
+        public string currentCategory = "";
         private string currentMediaType = "";
         private string currentStartsWith = "";
-		XmlDocument xmlFileTypes = new XmlDocument();
-		XmlDocument xmlLocations = new XmlDocument();
-		ArrayList currentMediaExtensions = new ArrayList();
+        XmlDocument xmlFileTypes = new XmlDocument();
+        XmlDocument xmlLocations = new XmlDocument();
+        ArrayList currentMediaExtensions = new ArrayList();
         ArrayList locations = new ArrayList();
         static string mediaXMLFilePath = ""; //Application.StartupPath +"\\config\\media.xml";
         static string gamesXMLFilePath = ""; //Application.StartupPath +"\\config\\games.xml";
@@ -404,7 +400,7 @@ namespace SCTVObjects
             {
                 XmlNode locationXMLFilePathNode = XMLSettings.SelectSingleNode("/settings/LocationXMLFilePath");
 
-                if(locationXMLFilePathNode != null)
+                if (locationXMLFilePathNode != null)
                     locationXMLFilePath = locationXMLFilePathNode.InnerText;
 
                 if (locationXMLFilePath.Trim().Length == 0)
@@ -441,7 +437,7 @@ namespace SCTVObjects
             {
                 XmlNode fileTypeFilePathNode = XMLSettings.SelectSingleNode("/settings/FileTypeFilePath");
 
-                if(fileTypeFilePathNode != null)
+                if (fileTypeFilePathNode != null)
                     fileTypeFilePath = fileTypeFilePathNode.InnerText;
 
                 if (fileTypeFilePath.Trim().Length == 0)
@@ -514,7 +510,7 @@ namespace SCTVObjects
             {
                 XmlNode defaultPathToSaveToNode = XMLSettings.SelectSingleNode("/settings/DefaultPathToSaveTo");
 
-                if(defaultPathToSaveToNode != null)
+                if (defaultPathToSaveToNode != null)
                     defaultPathToSaveTo = defaultPathToSaveToNode.InnerText;
 
                 if (defaultPathToSaveTo.Trim().Length == 0)
@@ -549,7 +545,7 @@ namespace SCTVObjects
 
         #region public mediaHandler()
         public MediaHandler()
-		{
+        {
             XmlNode baseNode;
 
             if (FileTypeFilePath != null && File.Exists(FileTypeFilePath))
@@ -576,18 +572,18 @@ namespace SCTVObjects
 
             xmlSettings = new XmlDocument();
 
-            if(SettingsFilePath != null && SettingsFilePath.Trim().Length > 0)
+            if (SettingsFilePath != null && SettingsFilePath.Trim().Length > 0)
                 xmlSettings.Load(SettingsFilePath);
 
             findLocations();
-		}
-		#endregion
+        }
+        #endregion
 
         private static string replaceConstants(string stringToMakeReplacements)
         {
             string returnString = "";
 
-            if(stringToMakeReplacements != null && Application.StartupPath != null)
+            if (stringToMakeReplacements != null && Application.StartupPath != null)
                 returnString = stringToMakeReplacements.Replace("|Application.StartupPath|", Application.StartupPath);
 
             return returnString;
@@ -649,7 +645,7 @@ namespace SCTVObjects
 
                         dsMedia.ReadXml(new StringReader(xmlQuery(MediaXMLFilePath, "getMedia.xqu").InnerXml.ToString()));
                     }
-                   
+
                 }
                 catch (Exception ex)
                 {
@@ -670,7 +666,7 @@ namespace SCTVObjects
                     try
                     {
                         dsMedia = validateMedia(dsMedia);
-                        
+
                         if (dsMedia.Tables[0].Columns.Contains("SortBy"))
                             dsMedia.Tables[0].DefaultView.Sort = "SortBy";//alphabetize                        
                     }
@@ -789,7 +785,7 @@ namespace SCTVObjects
 
                 try
                 {
-                    if (!File.Exists(GamesXMLFilePath.ToLower().Replace("games.xml","gameCategories.xml")))
+                    if (!File.Exists(GamesXMLFilePath.ToLower().Replace("games.xml", "gameCategories.xml")))
                     {
                         XmlDocument tempDoc = new XmlDocument();
 
@@ -1025,7 +1021,7 @@ namespace SCTVObjects
             }
             return dsGamesToCategories;
         }
-        
+
         /// <summary>
         /// fills dsMediaTypes with media records from mediaTypesPath
         /// </summary>
@@ -1230,7 +1226,7 @@ namespace SCTVObjects
 
                         while (sequel == null)
                         {
-                            tryCounter++; 
+                            tryCounter++;
 
                             //get random number to choose an index with
                             Random rnd = new Random();
@@ -1243,7 +1239,7 @@ namespace SCTVObjects
                             if (sequel.filePath == currentFile.filePath)
                                 sequel = null;
 
-                            if(tryCounter > 4)
+                            if (tryCounter > 4)
                                 break;
                         }
                     }
@@ -1251,9 +1247,9 @@ namespace SCTVObjects
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "GetSequel "+ ex.Message + Environment.NewLine + ex.StackTrace);
+                Tools.WriteToFile(Tools.errorFile, "GetSequel " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
-            
+
             return sequel;
         }
 
@@ -1631,7 +1627,7 @@ namespace SCTVObjects
                 //dsMedia.Tables[0].DefaultView.RowFilter = "len(ID) = 0";
                 //foreach (DataRowView dr in dsMedia.Tables[0].DefaultView)
                 //    dr["ID"] = dr.Row.Table.Rows.IndexOf(dr.Row);
-                foreach(DataRow dr in dsMedia.Tables[0].Rows)
+                foreach (DataRow dr in dsMedia.Tables[0].Rows)
                     dr["ID"] = dr.Table.Rows.IndexOf(dr);
 
                 //validate mediaType for all records
@@ -1739,14 +1735,14 @@ namespace SCTVObjects
                 foreach (DataRowView dr in dsMedia.Tables[0].DefaultView)
                     dr["rating"] = "";
 
-                
+
 
                 //save xml
                 dsMedia.WriteXml(MediaXMLFilePath);
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "validateMedia: "+ ex.ToString());
+                Tools.WriteToFile(Tools.errorFile, "validateMedia: " + ex.ToString());
             }
 
             return dsMedia;
@@ -1852,7 +1848,7 @@ namespace SCTVObjects
 
                 if (!dsGames.Tables[0].Columns.Contains("filePath"))
                 {
-                    fi = new FileInfo(Application.StartupPath +"\\games\\"+ dsGames.Tables[0].Columns["fileName"].ToString());
+                    fi = new FileInfo(Application.StartupPath + "\\games\\" + dsGames.Tables[0].Columns["fileName"].ToString());
 
                     dc = new DataColumn();
                     dc.DefaultValue = "";
@@ -1928,7 +1924,7 @@ namespace SCTVObjects
 
                     dsGames.Tables[0].Columns.Add(dc);
                 }
-                
+
                 //validate ID for all records
                 //dsMedia.Tables[0].DefaultView.RowFilter = "len(ID) = 0";
                 //foreach (DataRowView dr in dsMedia.Tables[0].DefaultView)
@@ -1953,7 +1949,7 @@ namespace SCTVObjects
                 dsGames.Tables[0].DefaultView.RowFilter = "len(ShortDescription) = 0";
                 foreach (DataRowView dr in dsGames.Tables[0].DefaultView)
                     dr["ShortDescription"] = "";
-                
+
                 //save xml
                 dsGames.WriteXml(GamesXMLFilePath);
             }
@@ -1985,7 +1981,7 @@ namespace SCTVObjects
             //add DefaultPathToSaveTo to locations 
             //TODO: get this value from config file
             //if (locations.Count == 0 && !locations.Contains(DefaultPathToSaveTo.ToLower()))
-            if(!addedLocation)
+            if (!addedLocation)
                 locations.Add(DefaultPathToSaveTo.ToLower());
         }
 
@@ -1995,33 +1991,33 @@ namespace SCTVObjects
         /// <param name="newMediaType"></param>
         /// <returns></returns>
 		public DataView changeFileTypes(string newFileType)
-		{
-			while(dsMedia.Tables.Count < 1)//check for the existance of tables in dsMedia
-			{
-				GetMedia();
-			}
+        {
+            while (dsMedia.Tables.Count < 1)//check for the existance of tables in dsMedia
+            {
+                GetMedia();
+            }
 
-			while(dsFileTypes.Tables.Count < 1)//check for the existance of tables in dsMediaTypes
-			{
-				getFileTypes(newFileType);
-			}
+            while (dsFileTypes.Tables.Count < 1)//check for the existance of tables in dsMediaTypes
+            {
+                getFileTypes(newFileType);
+            }
 
-			string strLIKE = null;
-			int rowCount = 0;
+            string strLIKE = null;
+            int rowCount = 0;
 
-			foreach(DataRow dr in dsFileTypes.Tables[0].Rows) //get rows that belong to this media type
-			{
-				Tools.WriteToFile(Tools.errorFile,"mediaType "+ dr[0].ToString());
-				rowCount++;
-				strLIKE += "[filePath] LIKE '%."+ dr[0].ToString().Replace("'", "''") + "'";
-				currentMediaExtensions.Add(dr[0].ToString());
-				if(rowCount < dr.Table.Rows.Count)//this is not the last row add an "OR" to the end of the string
-					strLIKE += " OR ";
-			}
-			dsMedia.Tables[0].DefaultView.RowFilter = strLIKE;
-//			updateCategories(dsMedia.Tables[0].DefaultView);
-//			return dsMedia;
-			return dsMedia.Tables[0].DefaultView;
+            foreach (DataRow dr in dsFileTypes.Tables[0].Rows) //get rows that belong to this media type
+            {
+                Tools.WriteToFile(Tools.errorFile, "mediaType " + dr[0].ToString());
+                rowCount++;
+                strLIKE += "[filePath] LIKE '%." + dr[0].ToString().Replace("'", "''") + "'";
+                currentMediaExtensions.Add(dr[0].ToString());
+                if (rowCount < dr.Table.Rows.Count)//this is not the last row add an "OR" to the end of the string
+                    strLIKE += " OR ";
+            }
+            dsMedia.Tables[0].DefaultView.RowFilter = strLIKE;
+            //			updateCategories(dsMedia.Tables[0].DefaultView);
+            //			return dsMedia;
+            return dsMedia.Tables[0].DefaultView;
         }
 
         public DataView GetTVShowMedia(string seriesIMDBNum)
@@ -2097,7 +2093,7 @@ namespace SCTVObjects
             {
                 dsMedia.Tables[0].DefaultView.RowFilter = "releaseID = '" + releaseID + "'";
             }
-            
+
             dsMedia.Tables[0].DefaultView.Sort = "title";
             foundData = dsMedia.Tables[0].DefaultView;
 
@@ -2132,24 +2128,24 @@ namespace SCTVObjects
 
                 //if (category.Contains("|"))
                 //{
-                    categories = category.Split('|');
+                categories = category.Split('|');
 
-                    category = "";
+                category = "";
 
-                    foreach (string cat in categories)
+                foreach (string cat in categories)
+                {
+                    if (category.Length > 0)
                     {
-                        if (category.Length > 0)
-                        {
-                            if (filterOutResults)
-                                category += " and ";
-                            else
-                                category += " or ";
-
-                            category += "category LIKE '*" + cat.Replace("'", "''") + "*'";
-                        }
+                        if (filterOutResults)
+                            category += " and ";
                         else
-                            category += "category LIKE '*" + cat.Replace("'", "''") + "*'";
+                            category += " or ";
+
+                        category += "category LIKE '*" + cat.Replace("'", "''") + "*'";
                     }
+                    else
+                        category += "category LIKE '*" + cat.Replace("'", "''") + "*'";
+                }
                 //}
 
                 if (currentCategory.ToLower() == "playlist")
@@ -2176,7 +2172,7 @@ namespace SCTVObjects
                     switch (mediaType.ToLower())
                     {
                         case "pictures":
-                            switch (category.ToLower().Replace("category like '*","").Replace("*'",""))
+                            switch (category.ToLower().Replace("category like '*", "").Replace("*'", ""))
                             {
                                 case "all":
                                     if (startsWith.ToLower() != "all")
@@ -2282,10 +2278,10 @@ namespace SCTVObjects
                                 default:
                                     if (startsWith.ToLower() != "all")
                                         dsMedia.Tables[0].DefaultView.RowFilter = category + " and SortBy LIKE '" + startsWith + "*' and MediaType LIKE '*" + mediaType.Replace("'", "''") + "*'";
-                                        //dsMedia.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and SortBy LIKE '" + startsWith + "*' and MediaType LIKE '*" + mediaType + "*'";
+                                    //dsMedia.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and SortBy LIKE '" + startsWith + "*' and MediaType LIKE '*" + mediaType + "*'";
                                     else
                                         dsMedia.Tables[0].DefaultView.RowFilter = category + " and MediaType LIKE '*" + mediaType.Replace("'", "''") + "*'";
-                                        //dsMedia.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and MediaType LIKE '*" + mediaType + "*'";
+                                    //dsMedia.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and MediaType LIKE '*" + mediaType + "*'";
 
                                     dsMedia.Tables[0].DefaultView.Sort = "SortBy";
                                     foundData = dsMedia.Tables[0].DefaultView;
@@ -2296,10 +2292,10 @@ namespace SCTVObjects
                             //filter for category and return
                             if (startsWith.ToLower() == "all")
                                 dsMediaTypes.Tables[0].DefaultView.RowFilter = category + " and mediaCategory LIKE '*" + mediaType.Replace("'", "''") + "*'";
-                                //dsMediaTypes.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and mediaCategory LIKE '*" + mediaType + "*'";
+                            //dsMediaTypes.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and mediaCategory LIKE '*" + mediaType + "*'";
                             else
                                 dsMediaTypes.Tables[0].DefaultView.RowFilter = category + " and mediaCategory LIKE '*" + mediaType.Replace("'", "''") + "*' and name LIKE '" + startsWith + "*'";
-                                //dsMediaTypes.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and mediaCategory LIKE '*" + mediaType + "*' and name LIKE '" + startsWith + "*'";
+                            //dsMediaTypes.Tables[0].DefaultView.RowFilter = "category LIKE '*" + category + "*' and mediaCategory LIKE '*" + mediaType + "*' and name LIKE '" + startsWith + "*'";
 
                             dsMediaTypes.Tables[0].DefaultView.Sort = "name";
                             foundData = dsMediaTypes.Tables[0].DefaultView;
@@ -2476,7 +2472,7 @@ namespace SCTVObjects
                                     if (startsWith.ToLower() != "all")
                                         dsGames.Tables[0].DefaultView.RowFilter = category.ToLower().Replace(category.ToLower().Replace("category like '*", "").Replace("*'", ""), categoryID) + " and name LIKE '" + startsWith + "*' and categoryID NOT = '8' and display = 'True'";
                                     else
-                                        dsGames.Tables[0].DefaultView.RowFilter = category.ToLower().Replace(category.ToLower().Replace("category like '*", "").Replace("*'", ""),categoryID);
+                                        dsGames.Tables[0].DefaultView.RowFilter = category.ToLower().Replace(category.ToLower().Replace("category like '*", "").Replace("*'", ""), categoryID);
 
                                     dsGames.Tables[0].DefaultView.RowFilter = dsGames.Tables[0].DefaultView.RowFilter.Replace("*", "");
                                     dsGames.Tables[0].DefaultView.RowFilter = dsGames.Tables[0].DefaultView.RowFilter.Replace("category like '", "categoryID = '");
@@ -2559,10 +2555,10 @@ namespace SCTVObjects
                             if (dsMedia.Tables.Count > 0)
                             {
                                 string tempCategory = category;
-                                
+
                                 tempCategory = tempCategory.Replace("category LIKE '*New*'", "");
 
-                                if (tempCategory.ToLower().Replace("category like '*", "").Replace("*'", "").Replace("and ","").Trim() == "misc")
+                                if (tempCategory.ToLower().Replace("category like '*", "").Replace("*'", "").Replace("and ", "").Trim() == "misc")
                                 {
                                     dtTVShows = dsMedia.Tables[0].Copy();
                                     dtTVShows.DefaultView.RowFilter = "MediaType LIKE '*" + mediaType.Replace("'", "''") + "*' and len(SeriesIMDBNum) = 0";
@@ -2845,16 +2841,16 @@ namespace SCTVObjects
 
             return foundData;
         }
-        
+
         /// <summary>
         /// Gets the available categories for the given mediaType
         /// </summary>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-		public DataView GetAllCategories(string mediaType)
-		{
-			try
-			{
+        public DataView GetAllCategories(string mediaType)
+        {
+            try
+            {
                 if (mediaType.ToLower() == "online")
                 {
                     if (dsMediaTypes.Tables.Count < 1)//check for the existance of tables in dsMediaTypes
@@ -2953,14 +2949,14 @@ namespace SCTVObjects
                         }
                     }
                 }
-			}
-			catch(Exception ex)
-			{
-				Tools.WriteToFile(Tools.errorFile,ex.ToString());
-			}
+            }
+            catch (Exception ex)
+            {
+                Tools.WriteToFile(Tools.errorFile, ex.ToString());
+            }
 
             return dsMedia.Tables[0].DefaultView;
-		}
+        }
 
         /// <summary>
         /// Gets the available mediaTypes from dsMedia
@@ -2974,11 +2970,11 @@ namespace SCTVObjects
             {
                 if (dsMedia.Tables.Count < 1)//check for the existance of tables in dsMedia
                     GetMedia();
-                
+
                 if (dsMedia.Tables.Count > 0 && dsMedia.Tables[0].Columns.Contains("MediaType"))
                 {
                     dsMedia.Tables[0].DefaultView.RowFilter = "len(MediaType) > 0";
-                    
+
                     //get distinct types
                     foundTypes = new ArrayList();
                     foreach (DataRow dr in dsMedia.Tables[0].DefaultView.Table.Rows)
@@ -3018,7 +3014,7 @@ namespace SCTVObjects
                     GetMedia();
 
                 if (dsMedia.Tables.Count > 0)
-                    dsMedia.Tables[0].DefaultView.RowFilter = "dateAdded > "+ DateTime.Now.AddDays(-1);
+                    dsMedia.Tables[0].DefaultView.RowFilter = "dateAdded > " + DateTime.Now.AddDays(-1);
                 else
                 {
                     //create empty dataTable
@@ -3028,7 +3024,7 @@ namespace SCTVObjects
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "GetNewMedia "+ ex.ToString());
+                Tools.WriteToFile(Tools.errorFile, "GetNewMedia " + ex.ToString());
             }
 
             return dsMedia.Tables[0].DefaultView;
@@ -3052,95 +3048,95 @@ namespace SCTVObjects
                 }
                 dtSource.ImportRow(dvSource[i].Row);
             }
-            
+
             //return new DataView(dtSource, dvSource.RowFilter, dvSource.Sort, dvSource.RowStateFilter); 
 
             return dtSource.DefaultView;
         }
-		
-		public DataView SearchByFilePath(string filePath)
-		{
-			try
-			{
-				if(dsMedia.Tables.Count < 1)
-				{
-					GetMedia();
-				}
-				dsMedia.Tables[0].DefaultView.RowFilter = "filePath LIKE '*"+ filePath.Replace("'", "''") + "*'";
-				return dsMedia.Tables[0].DefaultView;
-			}
-			catch(Exception ex)
-			{
-				Tools.WriteToFile(Tools.errorFile,"searchByFilePath ERROR "+ ex.ToString());
-				return null;
-			}
-		}
 
-		public DataView SearchByTitle(string title)
-		{
-			try
-			{
-				if(dsMedia.Tables.Count < 1)
-				{
-					GetMedia();
-				}
-				dsMedia.Tables[0].DefaultView.RowFilter = "title LIKE '%"+ title.Replace("'", "''") + "%'";
-				return dsMedia.Tables[0].DefaultView;
-			}
-			catch(Exception ex)
-			{
-				Tools.WriteToFile(Tools.errorFile, "SearchByTitle ERROR " + ex.ToString());
-				return null;
-			}
-		}
+        public DataView SearchByFilePath(string filePath)
+        {
+            try
+            {
+                if (dsMedia.Tables.Count < 1)
+                {
+                    GetMedia();
+                }
+                dsMedia.Tables[0].DefaultView.RowFilter = "filePath LIKE '*" + filePath.Replace("'", "''") + "*'";
+                return dsMedia.Tables[0].DefaultView;
+            }
+            catch (Exception ex)
+            {
+                Tools.WriteToFile(Tools.errorFile, "searchByFilePath ERROR " + ex.ToString());
+                return null;
+            }
+        }
 
-		/// <summary>
-		/// Get file types from fileTypes.xml
-		/// </summary>
-		/// <param name="mediaType"></param>
-		public void getFileTypes(string fileType)
-		{
-			dsFileTypes.Clear();
-			dsFileTypes.ReadXml(new StringReader(xmlQuery("fileTypes.xml","(document(\"theFile\")//fileTypes//"+ fileType +"//type)").InnerXml.ToString()));
-		}
+        public DataView SearchByTitle(string title)
+        {
+            try
+            {
+                if (dsMedia.Tables.Count < 1)
+                {
+                    GetMedia();
+                }
+                dsMedia.Tables[0].DefaultView.RowFilter = "title LIKE '%" + title.Replace("'", "''") + "%'";
+                return dsMedia.Tables[0].DefaultView;
+            }
+            catch (Exception ex)
+            {
+                Tools.WriteToFile(Tools.errorFile, "SearchByTitle ERROR " + ex.ToString());
+                return null;
+            }
+        }
 
-		/// <summary>
-		/// will query an xml document given the document name and query or a query file name
-		/// </summary>
-		/// <param name="fileName"></param>
-		/// <param name="query"></param>
-		/// <returns></returns>
-		private static XmlDocument xmlQuery(string filePath,string query)
-		{
-			XmlDocument xmlResults = new XmlDocument();
-			try 
-			{ 
-				// create the collection
-				XQueryNavigatorCollection col = new XQueryNavigatorCollection();                        
-				// add the file to the collection
-				// the file will be referenced in the query statement by its alias
-				col.AddNavigator(filePath,"theFile"); 
-				//				if(fileName == "Config\\media.xml")
-				//				{
-				//					col.AddNavigator("Config\\fileTypes.xml", "fileTypes");
-				//				}
-				// copy the query out from the file
-				String q = String.Empty;
-				if ( query.IndexOf(".xqu") > 0)//this is a query file 
-				{                
-					StreamReader sr = new StreamReader(Application.StartupPath +"\\XQu\\"+ query);
-					q = sr.ReadToEnd();
-					sr.Close();
-				}
-				else
-				{
-					q = query;
-				}
-//				Tools.WriteToFile(Tools.errorFile,q.ToString());
-				// compile the query
-				XQueryExpression expr = new XQueryExpression(q);
+        /// <summary>
+        /// Get file types from fileTypes.xml
+        /// </summary>
+        /// <param name="mediaType"></param>
+        public void getFileTypes(string fileType)
+        {
+            dsFileTypes.Clear();
+            dsFileTypes.ReadXml(new StringReader(xmlQuery("fileTypes.xml", "(document(\"theFile\")//fileTypes//" + fileType + "//type)").InnerXml.ToString()));
+        }
 
-                if(filePath.ToLower().Contains("media.xml"))
+        /// <summary>
+        /// will query an xml document given the document name and query or a query file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        private static XmlDocument xmlQuery(string filePath, string query)
+        {
+            XmlDocument xmlResults = new XmlDocument();
+            try
+            {
+                // create the collection
+                XQueryNavigatorCollection col = new XQueryNavigatorCollection();
+                // add the file to the collection
+                // the file will be referenced in the query statement by its alias
+                col.AddNavigator(filePath, "theFile");
+                //				if(fileName == "Config\\media.xml")
+                //				{
+                //					col.AddNavigator("Config\\fileTypes.xml", "fileTypes");
+                //				}
+                // copy the query out from the file
+                String q = String.Empty;
+                if (query.IndexOf(".xqu") > 0)//this is a query file 
+                {
+                    StreamReader sr = new StreamReader(Application.StartupPath + "\\XQu\\" + query);
+                    q = sr.ReadToEnd();
+                    sr.Close();
+                }
+                else
+                {
+                    q = query;
+                }
+                //				Tools.WriteToFile(Tools.errorFile,q.ToString());
+                // compile the query
+                XQueryExpression expr = new XQueryExpression(q);
+
+                if (filePath.ToLower().Contains("media.xml"))
                     xmlResults.LoadXml("<mediaFiles>" + expr.Execute(col).ToXml() + "</mediaFiles>");
                 else if (filePath.ToLower().Contains("games.xml"))
                     xmlResults.LoadXml("<games>" + expr.Execute(col).ToXml() + "</games>");
@@ -3161,14 +3157,14 @@ namespace SCTVObjects
                 //					}
                 //				}
             }
-			catch ( Exception e ) 
-			{
-//				lblMessage.Text = e.ToString();
-				Tools.WriteToFile(Tools.errorFile,"File: "+ filePath +"     "+ e.ToString());
-			}
-//			Tools.WriteToFile(Tools.errorFile,"Results: "+ expr.Execute(col).ToXml().ToString());
-			return xmlResults;
-		}
+            catch (Exception e)
+            {
+                //				lblMessage.Text = e.ToString();
+                Tools.WriteToFile(Tools.errorFile, "File: " + filePath + "     " + e.ToString());
+            }
+            //			Tools.WriteToFile(Tools.errorFile,"Results: "+ expr.Execute(col).ToXml().ToString());
+            return xmlResults;
+        }
 
         /// <summary>
         /// finds new files in the folders specified in config/locations.xml and ads their information to config/media.xml
@@ -3200,28 +3196,28 @@ namespace SCTVObjects
                     ds.Tables[0].PrimaryKey = pk;
                 }
 
-                if(locations.Count == 0)
+                if (locations.Count == 0)
                     System.Windows.Forms.MessageBox.Show("There are no valid media sources to read from");
                 else
                 {
-                    foreach(string location in locations)
+                    foreach (string location in locations)
                     {
                         string newLocation = location;
 
                         if (newLocation.Contains(","))
                             newLocation = newLocation.Split(',')[0];
 
-                        if(Directory.Exists(newLocation))
+                        if (Directory.Exists(newLocation))
                         {
                             tempDoc = lookForMedia(bestMatch, location, tempDoc, ds);
                         }
                         else
-                            System.Windows.Forms.MessageBox.Show("Invalid media source "+ newLocation);
+                            System.Windows.Forms.MessageBox.Show("Invalid media source " + newLocation);
 
                         //tempDoc.Save(mediaFilePath);
                     }
                 }
-                
+
                 dsMedia = GetMedia();
             }
             catch (Exception ex)
@@ -3242,7 +3238,7 @@ namespace SCTVObjects
                 dLocation = location.Split(',')[0];
                 mediaType = location.Split(',')[1];
             }
-            
+
             try
             {
                 DirectoryInfo fl = new DirectoryInfo(dLocation);
@@ -3263,7 +3259,7 @@ namespace SCTVObjects
                                 foundMediaType = getMediaType(entry.Extension);
 
                                 if (mediaType.ToLower() == "tv" && foundMediaType.ToLower() == "movies")
-                                    foundMediaType = mediaType; 
+                                    foundMediaType = mediaType;
 
                                 if (foundMediaType.Length == 0)
                                     foundMediaType = mediaType;
@@ -3272,7 +3268,7 @@ namespace SCTVObjects
                             //string dvdMovieName = "";
                             DirectoryInfo dvdFolder = null;
 
-                            if(entry.Extension.ToLower().Contains("vob"))//these are dvd files - the folder needs to be played all at once
+                            if (entry.Extension.ToLower().Contains("vob"))//these are dvd files - the folder needs to be played all at once
                             {
                                 if (fl.Name.ToLower() == "video_ts")
                                 {
@@ -3281,19 +3277,19 @@ namespace SCTVObjects
                                 }
                                 else
                                     dvdFolder = fl;
-                                    //dvdMovieName = fl.Parent.Name;
+                                //dvdMovieName = fl.Parent.Name;
                             }
 
                             if (dLocation.LastIndexOf("\\") != dLocation.Length - 1)
                                 dLocation += "\\";
 
-                            if (ds.Tables.Count == 0 || ds.Tables[0].DefaultView.Table.Select("filePath LIKE '*" + dLocation + entry.Name.Trim().Replace("'","''") + "*'").Length == 0)//ds.Tables[0].Rows.Find(dLocation + "\\" + entry.Name.ToString().Trim()) == null)//this file name doesn't exist in the media file
+                            if (ds.Tables.Count == 0 || ds.Tables[0].DefaultView.Table.Select("filePath LIKE '*" + dLocation + entry.Name.Trim().Replace("'", "''") + "*'").Length == 0)//ds.Tables[0].Rows.Find(dLocation + "\\" + entry.Name.ToString().Trim()) == null)//this file name doesn't exist in the media file
                             {
                                 if (foundMediaType.ToLower() == "images")
                                 {
                                     tempDoc = addImageFile(tempDoc, entry, bestMatch, foundMediaType);
                                 }
-                                else if(dvdFolder != null)
+                                else if (dvdFolder != null)
                                 {
                                     tempDoc = addDVDFolder(tempDoc, dvdFolder, entry, bestMatch, foundMediaType);
                                 }
@@ -3444,8 +3440,8 @@ namespace SCTVObjects
                                 catch (Exception ex)
                                 {
                                     Tools.WriteToFile(ex);
-                                    Tools.WriteToFile(Tools.errorFile, "lookForMedia1 location " + location +"\\"+ entry.Name);
-                                }                                
+                                    Tools.WriteToFile(Tools.errorFile, "lookForMedia1 location " + location + "\\" + entry.Name);
+                                }
                             }
                         }
                     }
@@ -3454,8 +3450,8 @@ namespace SCTVObjects
                 //look through children folders
                 foreach (DirectoryInfo dir in fl.GetDirectories())
                 {
-                    if(mediaType.Trim().Length > 0)
-                        tempDoc = lookForMedia(bestMatch, dir.FullName +","+ mediaType, tempDoc, ds);
+                    if (mediaType.Trim().Length > 0)
+                        tempDoc = lookForMedia(bestMatch, dir.FullName + "," + mediaType, tempDoc, ds);
                     else
                         tempDoc = lookForMedia(bestMatch, dir.FullName, tempDoc, ds);
                 }
@@ -3513,7 +3509,7 @@ namespace SCTVObjects
                     }
                 }
 
-                foreach(DataRow dr in rowsToDelete)
+                foreach (DataRow dr in rowsToDelete)
                     dsMedia.Tables[0].Rows.Remove(dr);
             }
             catch (Exception ex)
@@ -3547,7 +3543,7 @@ namespace SCTVObjects
             string fileName = "";
             string formattedFileName = "";
             fileName = System.Text.RegularExpressions.Regex.Replace(fileToAdd.Name, fileToAdd.Extension, "");
-            
+
             if (fileToAdd.FullName.ToLower().Contains("justindownloads"))
                 fileName = fileName.Split('_')[0];
 
@@ -3561,7 +3557,7 @@ namespace SCTVObjects
                     {
                         newMedia = getTVSeriesInfoFromFileName(fileName, null);
 
-                        if(newMedia.MediaType == null || newMedia.MediaType.Trim().Length == 0)
+                        if (newMedia.MediaType == null || newMedia.MediaType.Trim().Length == 0)
                             newMedia.MediaType = foundMediaType;
 
                         //get imdb info
@@ -3577,9 +3573,9 @@ namespace SCTVObjects
                         else
                             newMedia.MediaType = foundMediaType;
 
-                        if(foundMediaType.ToLower() == "tv")
+                        if (foundMediaType.ToLower() == "tv")
                             newMedia = getEpisodeInfo(newMedia);
-                            
+
 
                         //imdb.getPhoto(newMedia);
                     }
@@ -3744,7 +3740,7 @@ namespace SCTVObjects
                 newNode.AppendChild(lastPlayedNode);
                 newNode.AppendChild(mediaTypeNode);
                 newNode.AppendChild(lastPlayPositionNode);
-                newNode.AppendChild(goofsNode); 
+                newNode.AppendChild(goofsNode);
                 newNode.AppendChild(triviaNode);
                 newNode.AppendChild(shortDescriptionNode);
                 newNode.AppendChild(seasonNode);
@@ -3794,7 +3790,7 @@ namespace SCTVObjects
                     //get MusicBrainz info
                     musicBrainz = new MusicBrainzScraper();
                     newMedia = musicBrainz.getInfoByTitleAndArtist(newMedia);
-                        
+
                     if (newMedia.MediaType != null)
                         foundMediaType = newMedia.MediaType;
                     else
@@ -3803,7 +3799,7 @@ namespace SCTVObjects
                 catch (Exception ex)
                 {
                     musicBrainz = null;
-                    
+
                     Tools.WriteToFile(Tools.errorFile, "addMusicFile error: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 }
 
@@ -4186,7 +4182,7 @@ namespace SCTVObjects
                 //make sure this exact record doesn't already exist
                 XmlNode xmlExistingNode = videoDoc.SelectSingleNode("/mediaFiles/media[filePath='" + fileToAdd.FullName.Replace("'", "''") + "']");
 
-                if(xmlExistingNode == null)
+                if (xmlExistingNode == null)
                 {
                     (xmlDVDNode["filePath"]).FirstChild.Value += "|" + fileToAdd.FullName;
 
@@ -4286,7 +4282,7 @@ namespace SCTVObjects
 
             return gameDoc;
         }
-        
+
         /// <summary>
         /// Add audio file info to given xmlDocument
         /// </summary>
@@ -4454,7 +4450,7 @@ namespace SCTVObjects
             string formattedFileName = "";
             fileName = System.Text.RegularExpressions.Regex.Replace(fileToAdd.Name, fileToAdd.Extension, "");
             formattedFileName = FormatNameString(fileName);
-            
+
             XmlNode newNode = imageDoc.CreateNode(XmlNodeType.Element, "image", "");
             XmlNode nameNode = imageDoc.CreateNode(XmlNodeType.Element, "title", "");
             XmlNode descriptionNode = imageDoc.CreateNode(XmlNodeType.Element, "description", "");
@@ -4579,7 +4575,7 @@ namespace SCTVObjects
         {
             bool foundDuplicate = false;
 
-            foreach(XmlNode node in xDoc.SelectNodes(nodePath))
+            foreach (XmlNode node in xDoc.SelectNodes(nodePath))
             {
                 if (node.InnerText.ToLower() == valueToAdd.ToLower())
                 {
@@ -4607,7 +4603,7 @@ namespace SCTVObjects
         //        string category = "";
         //        string formattedFileName = "";
         //        DirectoryInfo fl = new DirectoryInfo(location);
-				
+
         //        if(tempDoc == null)
         //        {
         //            tempDoc = new XmlDocument();
@@ -4632,7 +4628,7 @@ namespace SCTVObjects
         //            pk[0] = ds.Tables[0].Columns["filePath"];
         //            ds.Tables[0].PrimaryKey = pk;
         //        }
-						
+
         //        foreach (FileSystemInfo entry in fl.GetFileSystemInfos())
         //        {
         //            if(entry.Extension.Length > 0)//this is a file
@@ -4651,7 +4647,7 @@ namespace SCTVObjects
         //                        IMDBScraper imdb = new IMDBScraper();
         //                        Media newMedia = imdb.getInfoByTitle(formattedFileName, true);
         //                        imdb.getPhoto(newMedia);
-                                
+
         //                        XmlNode newNode = tempDoc.CreateNode(XmlNodeType.Element,"media","");
 
         //                        XmlNode previousTitleNode = tempDoc.CreateNode(XmlNodeType.Element, "previousTitle", "");
@@ -4700,8 +4696,8 @@ namespace SCTVObjects
         //                        XmlNode mediaTypeNode = tempDoc.CreateNode(XmlNodeType.Element, "MediaType", "");
         //                        mediaTypeNode.InnerText = "";
 
-                                
-					
+
+
         //                        newNode.AppendChild(nameNode);
         //                        newNode.AppendChild(previousTitleNode);
         //                        newNode.AppendChild(performersNode);
@@ -4780,7 +4776,7 @@ namespace SCTVObjects
                     int previousChar = 0;
                     ArrayList foundSpaces = new ArrayList();
                     string charSpace = " ";
-                    
+
                     //replace underscores with space
                     stringToSpace = stringToSpace.Replace("_", " ");
 
@@ -4882,7 +4878,7 @@ namespace SCTVObjects
         private string findCategory(string location, string entryName)
         {
             string currentCategory = "";// System.Text.RegularExpressions.Regex.Replace(location, "Z:\\Video\\", "");
-            
+
             if (currentCategory != entryName)//if the file is in a subfolder make the name of the subfolder the category name
             {
                 currentCategory = System.Text.RegularExpressions.Regex.Replace(currentCategory, entryName, "");
@@ -5020,7 +5016,7 @@ namespace SCTVObjects
             {
                 //gets the folder name for the artist
                 artist = file.FullName.Replace(file.Name, "");
-                
+
                 //remove any location paths from artist
                 foreach (string location in locations)
                 {
@@ -5035,11 +5031,11 @@ namespace SCTVObjects
                 artist = artist.Replace("\\", "").Trim();
 
                 newMedia.Artist = FormatNameString(artist);
-                
+
                 songTitle = System.Text.RegularExpressions.Regex.Replace(file.Name, file.Extension, "");
                 songTitle = FormatNameString(songTitle);
 
-                if(artist.Length > 0)
+                if (artist.Length > 0)
                     tempSongTitle = songTitle.Replace(artist, "").Trim();
 
                 if (tempSongTitle.Length > 0)
@@ -5051,7 +5047,7 @@ namespace SCTVObjects
             {
                 Tools.WriteToFile(Tools.errorFile, "getMusicInfoFromFileSystemInfo " + ex.ToString());
             }
-            
+
             return newMedia;
         }
 
@@ -5072,7 +5068,7 @@ namespace SCTVObjects
                 string tempEpisode = "";
                 string tempSeason = tempSeasonAndEpisode;
 
-                if(tempSeasonAndEpisode.Length > 0 && tempSeasonAndEpisode.Contains("|"))
+                if (tempSeasonAndEpisode.Length > 0 && tempSeasonAndEpisode.Contains("|"))
                 {
                     tempSeason = tempSeasonAndEpisode.Split('|')[0];
                     tempEpisode = tempSeasonAndEpisode.Split('|')[1];
@@ -5095,14 +5091,14 @@ namespace SCTVObjects
                         tempTitle = tempTitle.Substring(tempTitle.IndexOf(newMedia.EpisodeNum)).Trim();
                 }
 
-                if(newMedia.Season.Trim().Length > 0 && newMedia.EpisodeNum.Trim().Length > 0)
+                if (newMedia.Season.Trim().Length > 0 && newMedia.EpisodeNum.Trim().Length > 0)
                     newMedia.MediaType = "TV";
             }
             catch (Exception ex)
             {
                 Tools.WriteToFile(Tools.errorFile, "getTVSeriesInfoFromFileName " + ex.ToString());
             }
-            
+
             newMedia.Title = FormatNameString(tempTitle);
 
             return newMedia;
@@ -5211,26 +5207,26 @@ namespace SCTVObjects
 
                     //if (splitCounter > 1)//skip first split
                     //{
-                        string tempStringClean = tempString.Replace("pisode", "");
+                    string tempStringClean = tempString.Replace("pisode", "");
 
-                        if (Char.IsDigit(tempStringClean.ToCharArray()[0]))//the first character is a digit
+                    if (Char.IsDigit(tempStringClean.ToCharArray()[0]))//the first character is a digit
+                    {
+                        returnString = tempStringClean;
+
+                        foreach (char character in tempStringClean.ToCharArray())
                         {
-                            returnString = tempStringClean;
-
-                            foreach (char character in tempStringClean.ToCharArray())
+                            if (!Char.IsDigit(character))
                             {
-                                if (!Char.IsDigit(character))
-                                {
-                                    returnString = tempStringClean.Substring(0, tempStringClean.IndexOf(character.ToString()));
-                                    break;
-                                }
+                                returnString = tempStringClean.Substring(0, tempStringClean.IndexOf(character.ToString()));
+                                break;
                             }
                         }
+                    }
 
-                        if (returnString.Length > 0)
-                        {
-                            break;
-                        }
+                    if (returnString.Length > 0)
+                    {
+                        break;
+                    }
                     //}
                 }
             }
@@ -5280,7 +5276,7 @@ namespace SCTVObjects
 
                     locationCorrectCase = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newLocation);//correct the casing
 
-                    if (!locations.Contains(location) || (xmlLocations.SelectSingleNode("/locations/location[text()='" + locationCorrectCase + "']") == null && xmlLocations.SelectSingleNode("/locations/location[text()='" + locationCorrectCase + "," + fileType +"']") == null))//(newLocation.ToLower() == DefaultPathToSaveTo.ToLower() && locations.Count == 1))//keep out duplicates and the DefaultPathToSaveTo
+                    if (!locations.Contains(location) || (xmlLocations.SelectSingleNode("/locations/location[text()='" + locationCorrectCase + "']") == null && xmlLocations.SelectSingleNode("/locations/location[text()='" + locationCorrectCase + "," + fileType + "']") == null))//(newLocation.ToLower() == DefaultPathToSaveTo.ToLower() && locations.Count == 1))//keep out duplicates and the DefaultPathToSaveTo
                     {
                         updatedLocations = true;
 
@@ -5355,7 +5351,7 @@ namespace SCTVObjects
             try
             {
                 //if (dsMedia.Tables.Count < 1)//check for the existance of tables in dsMedia
-                    //GetMedia();
+                //GetMedia();
                 //else
                 //{
                 //    DataTable dtEmptyTable = new DataTable();
@@ -5617,7 +5613,7 @@ namespace SCTVObjects
                     if (updatedMedia.LastPlayPosition != null)
                         dv[0]["LastPlayPosition"] = updatedMedia.LastPlayPosition;
 
-                    if(updatedMedia.Goofs != null)
+                    if (updatedMedia.Goofs != null)
                         dv[0]["Goofs"] = updatedMedia.Goofs;
 
                     if (updatedMedia.Trivia != null)
@@ -5652,7 +5648,7 @@ namespace SCTVObjects
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "UpdateMediaInfo "+ ex.ToString());
+                Tools.WriteToFile(Tools.errorFile, "UpdateMediaInfo " + ex.ToString());
             }
         }
 
@@ -5669,19 +5665,19 @@ namespace SCTVObjects
                 //dsMedia.Tables[0].DefaultView.RowFilter = "ID = '" + mediaToDelete.ID + "'";
                 dsMedia.Tables[0].DefaultView.RowFilter = "filePath = '" + mediaToDelete.filePath + "'";
                 DataView dv = dsMedia.Tables[0].DefaultView;
-                
+
                 dsMedia.Tables[0].Rows.Remove(dsMedia.Tables[0].DefaultView[0].Row);
 
                 foreach (DataRow dr in dsMedia.Tables[0].Rows)
                     dr["ID"] = dr.Table.Rows.IndexOf(dr);
-                
+
                 //save xml
                 dsMedia.WriteXml(MediaXMLFilePath);
             }
             catch (Exception ex)
             {
                 Tools.WriteToFile(Tools.errorFile, "DeleteMedia " + ex.ToString() + Environment.NewLine + ex.StackTrace);
-            }            
+            }
         }
 
         public Media MergeMedia(Media media1, Media media2)
@@ -5690,14 +5686,14 @@ namespace SCTVObjects
 
             if (!media2.coverImage.ToLower().Contains("notavailable.jpg") && File.Exists(media2.filePath) && (media2.coverImage.Trim().Length > media1.coverImage.Trim().Length))
             {
-                
+
                 mergedMedia = media2;
                 DeleteMedia(media1);
 
                 //find the given media
                 dsMedia.Tables[0].DefaultView.RowFilter = "filepath = '" + media2.filePath + "'";
                 mergedMedia.filePath = media2.filePath + "|" + media1.filePath;
-                
+
             }
             else
             {
@@ -5708,7 +5704,7 @@ namespace SCTVObjects
                 mergedMedia.filePath = media1.filePath + "|" + media2.filePath;
             }
 
-            foreach(DataRowView dr in dsMedia.Tables[0].DefaultView)
+            foreach (DataRowView dr in dsMedia.Tables[0].DefaultView)
                 dr["filePath"] = mergedMedia.filePath;
 
             //save xml
@@ -5741,7 +5737,7 @@ namespace SCTVObjects
         /// <returns></returns>
         public DataSet GetPlaylist()
         {
-            return GetPlaylist("", "","","");
+            return GetPlaylist("", "", "", "");
         }
 
         /// <summary>
@@ -5893,7 +5889,7 @@ namespace SCTVObjects
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "lookForImages: "+ ex.ToString());
+                Tools.WriteToFile(Tools.errorFile, "lookForImages: " + ex.ToString());
             }
         }
 
@@ -6065,7 +6061,7 @@ namespace SCTVObjects
             if (mediaRow.DataView.Table.Columns.Contains("stars"))
                 retMedia.Stars = mediaRow["stars"].ToString();
 
-            if(mediaRow.DataView.Table.Columns.Contains("tagline"))
+            if (mediaRow.DataView.Table.Columns.Contains("tagline"))
                 retMedia.TagLine = mediaRow["tagline"].ToString();
 
             if (mediaRow.DataView.Table.Columns.Contains("timesPlayed"))

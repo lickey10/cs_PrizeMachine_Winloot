@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using System.Collections;
-using System.Drawing.Drawing2D;
 using SCTVObjects;
+using System;
+using System.Collections;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace SCTV.Controls
 {
@@ -31,12 +27,12 @@ namespace SCTV.Controls
 
         public ArrayList Tabs
         {
-            get 
+            get
             {
-                return tabControls; 
+                return tabControls;
             }
 
-            set 
+            set
             {
                 tabControls = value;
 
@@ -112,7 +108,7 @@ namespace SCTV.Controls
 
         public string SelectedTabIndexes
         {
-            set 
+            set
             {
                 int controlIndex = 0;
                 int result = 0;
@@ -136,7 +132,7 @@ namespace SCTV.Controls
                 flowLayoutPanel.Invalidate(true);
             }
 
-            get 
+            get
             {
                 string selectedIndexes = "";
                 int controlIndex = 0;
@@ -209,7 +205,7 @@ namespace SCTV.Controls
                         button1.Font = this.Font;
                         button1.AutoSize = true;
                         button1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                        
+
                         if (buttonHeight == 0)
                             buttonHeight = flowLayoutPanel.Height - flowLayoutPanel.AutoScrollMinSize.Height - 9;
 
@@ -275,7 +271,7 @@ namespace SCTV.Controls
             {
                 foreach (string tabName in tabControls)
                 {
-                    if(flowLayoutPanel.Controls[tabName].HasChildren)
+                    if (flowLayoutPanel.Controls[tabName].HasChildren)
                     {
                         if (((CheckBox)flowLayoutPanel.Controls[tabName].Controls[tabName]).Checked)
                             flowLayoutPanel.Controls[tabName].Tag = true;
@@ -321,7 +317,7 @@ namespace SCTV.Controls
                             e.Graphics.FillRectangle(bgBrush, rectButtonBkgd);
 
 
-                    
+
                     //textWidth = (int)(e.Graphics.MeasureString(selectedButton.Text, selectedButton.Font).Width);
 
                     //selectedButton.Width = textWidth + 6;
@@ -346,12 +342,12 @@ namespace SCTV.Controls
                 selectedButton.Tag = true;
             else
             {
-                
+
                 if ((selectedButton.Tag == null || !(bool)selectedButton.Tag || (selectedButton.HasChildren && ((CheckBox)selectedButton.Controls[0]).Checked)))
                     selectedButton.Tag = true;
                 else
                     selectedButton.Tag = false;
-            }            
+            }
 
             if (!multiSelect)
             {
@@ -362,7 +358,7 @@ namespace SCTV.Controls
             else
                 selectedButton.Invalidate();
 
-            if(SelectionChanged != null)
+            if (SelectionChanged != null)
                 SelectionChanged();
         }
 
@@ -376,9 +372,9 @@ namespace SCTV.Controls
                 {
                     button.Tag = false;
 
-                    if(button.HasChildren)
+                    if (button.HasChildren)
                     {
-                        if(button.Controls[button.Name] != null)
+                        if (button.Controls[button.Name] != null)
                         {
                             ((CheckBox)button.Controls[button.Name]).Checked = false;
                         }

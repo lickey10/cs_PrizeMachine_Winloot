@@ -1,23 +1,23 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using RefreshUtilities;
+using SCTVObjects;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Configuration;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using System.Collections;
-using Microsoft.Win32;
-using SCTVObjects;
-using System.Runtime.InteropServices;
-using RefreshUtilities;
-using System.Linq;
 
 namespace SCTV
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1301:AvoidDuplicateAccelerators")]
     public partial class MainForm : Form
     {
+        SettingsHelper helper = SettingsHelper.Current;
         private bool loggedIn = false;
         public static string[] blockedTerms;
         public static string[] foundBlockedTerms;
@@ -28,6 +28,8 @@ namespace SCTV
         public static string blockedSitesPath = "config\\BlockedSites.txt";
         public static string foundBlockedSitesPath = "config\\foundBlockedSites.txt";
         public static string loginInfoPath = "config\\LoginInfo.txt";
+        public static string statusLogPath = ConfigurationManager.AppSettings["StatusLogPath"]; //"config\\Status_"+ DateTime.Now.ToLongDateString() +"_"+ DateTime.Now.ToLongTimeString() +".txt";
+        public static string finishedLogPath = ConfigurationManager.AppSettings["finishedLogPath"];
         public bool adminLock = false;//locks down browser until unlocked by a parent
         public int loggedInTime = 0;
         public bool checkForms = true;
@@ -145,7 +147,7 @@ namespace SCTV
 
         public bool ShowVolumeControl
         {
-            set 
+            set
             {
                 showVolumeControl = value;
                 //volumeControl.Visible = value; 
@@ -176,13 +178,18 @@ namespace SCTV
                 //documentLoaded_tourList(value);
             }
         }
-        
+
         public MainForm()
         {
             InitializeComponent();
 
             try
             {
+                if(!statusLogPath.Contains("."))
+                    statusLogPath += "Status_"+ DateTime.Now.ToShortDateString().Replace("/","") +"_"+ DateTime.Now.ToShortTimeString().Replace(":","") +".txt";
+
+                statusLogPath = statusLogPath.Replace(" ", "");
+
                 useLatestIE();
 
                 tabControlEx.Name = "tabControlEx";
@@ -201,7 +208,7 @@ namespace SCTV
                 //_windowManager.ActiveBrowser.Navigating += ActiveBrowser_Navigating;
                 //_windowManager.ActiveBrowser.ScriptErrorsSuppressed = true;
                 _windowManager.ShowAddressBar = showAddressBar;
-                
+
                 showAddressBarToolStripMenuItem.Checked = showAddressBar;
 
                 startTime = DateTime.Now;
@@ -213,7 +220,7 @@ namespace SCTV
                 users.Add("lickeykids@gmail.com|soccer");
 
                 //getDefaultBrowser();
-                
+
             }
             catch (Exception ex)
             {
@@ -237,7 +244,7 @@ namespace SCTV
                 bitVideoBrowser = this._windowManager.New();
                 bitVideoBrowser.DocumentCompleted += MainBrowser_DocumentCompleted;
                 bitVideoBrowser.Url = new Uri("http://www.winloot.com/Sweepstake");
-                
+
                 //bitVideoBrowser.StartNewWindow += BitVideoBrowser_StartNewWindow;
 
                 try
@@ -258,7 +265,7 @@ namespace SCTV
             {
                 Tools.WriteToFile(ex);
                 //Application.Restart();
-            }            
+            }
         }
 
         private void RefreshUtilities_GoToUrlComplete(object sender, EventArgs e)
@@ -276,7 +283,7 @@ namespace SCTV
 
         private void RefreshUtilities_CallMethodComplete(object sender, EventArgs e)
         {
-            if(((TimerInfo)sender).MethodToCall == "javascript:useFavorites()")
+            if (((TimerInfo)sender).MethodToCall == "javascript:useFavorites()")
             {
                 findSubmit(bitVideoBrowser.Document);
             }
@@ -285,27 +292,33 @@ namespace SCTV
         private void RefreshUtilities_ClickComplete(object sender, EventArgs e)
         {
             //if the sender is the quick pick button then find and click the submit button
-            
-            if (((HtmlElement)sender).GetAttribute("value") == "QUICK PICKS" || ((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png")
-                || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
-                || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()")//this is the quick pick button - now click the submit button
+            try
             {
-                if (!findSubmit(bitVideoBrowser.Document))
-                    refreshUtilities.CallMethod("javascript:useFavorites()", true, lblRefreshTimer);
-            }
+                if (!bitVideoBrowser.Document.Url.ToString().Contains("www.winloot.com/Sweepstake/ShowSubmit/") && (((HtmlElement)sender).GetAttribute("value") == "QUICK PICKS" || ((HtmlElement)sender).GetAttribute("value") == "USE QUICK PICKS" || ((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png")
+                                || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
+                                || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()"))//this is the quick pick button - now click the submit button
+                {
+                    findSubmit(bitVideoBrowser.Document);
+                        //refreshUtilities.CallMethod("javascript:useFavorites()", true, lblRefreshTimer);
+                }
 
-            if (((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
-            {
-                if (!findSkipAndContinue())
+                if (((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
+                {
+                    if (!findSkipAndContinue())
+                    {
+                        foundQuickPick = false;
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                    }
+                }
+                else if (!loggingIn)
                 {
                     foundQuickPick = false;
-                    refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                    refreshUtilities.GoToURL("http://www.winloot.com/", 19, lblRefreshTimer, bitVideoBrowser);
                 }
             }
-            else if (!loggingIn)
+            catch (Exception ex)
             {
-                foundQuickPick = false;
-                refreshUtilities.GoToURL("http://www.winloot.com/", 19, lblRefreshTimer, bitVideoBrowser);
+                string error = ex.Message;
             }
         }
 
@@ -332,11 +345,26 @@ namespace SCTV
             //}
         }
 
+        //private void TourBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        //{
+        //    lblDownloading.BackColor = Color.Green;
+        //}
+
+        //private void TourBrowser_DownloadComplete(object sender, EventArgs e)
+        //{
+        //    lblStreaming.BackColor = Color.Red;
+        //}
+
+        //private void TourBrowser_Downloading(object sender, EventArgs e)
+        //{
+        //    lblStreaming.BackColor = Color.Green;
+        //}
+
         private void Window_Error(object sender, HtmlElementErrorEventArgs e)
         {
             //Application.Restart();
         }
-        
+
         private void ActiveBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             //documentString = "";
@@ -358,18 +386,18 @@ namespace SCTV
                         foundQuickPick = false;
                         foundOffsiteURL = true;
 
-                        if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
-                            findSkipAndContinue();
-                        else
-                            refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
+                        //if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
+                        //    findSkipAndContinue();
+                        //else
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
                     }
                     else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && !documentString.ToLower().Contains("logout"))//need to login
                     {
                         refreshUtilities.Cancel();
                         lblRefreshTimer.Text = "0 seconds";
 
-                        //if (logBackIn)
-                        //{
+                        if (!loggingIn || logBackIn)
+                        {
                             foreach (string user in users)
                             {
                                 if (userLoggingOut != user)
@@ -379,14 +407,25 @@ namespace SCTV
                                     break;
                                 }
                             }
-                        //}
+                        }
                     }
                     else if (bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/sweepstake") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/5k_sweepstakes"))
                     {
                         foundOffsiteURL = false;
                         loggingIn = false;
 
-                        if (!foundQuickPick)
+                        if (bitVideoBrowser.Document.Url.ToString().ToLower().Contains("www.winloot.com/sweepstake/showsubmit/"))
+                        {
+                            if (!foundSubmit || previousPageURL != bitVideoBrowser.Document.Url.ToString())
+                            {
+                                refreshUtilities.Cancel();
+
+                                previousPageURL = bitVideoBrowser.Document.Url.ToString();
+
+                                foundSubmit = findSubmit(bitVideoBrowser.Document);
+                            }
+                        }
+                        else if (!foundQuickPick)
                         {
                             if (!findQuickPick(bitVideoBrowser.Document))
                             {
@@ -432,10 +471,8 @@ namespace SCTV
                             findNextContestLink(bitVideoBrowser.DocumentText);
                         }
                     }
-                    else if (bitVideoBrowser.Url.Host.ToLower().Contains("www.winloot.com") && documentString.ToLower().Contains("login") && currentUser.Length == 0) //click switch users
-                    {
-                        refreshUtilities.ClickButton(btnSwitchUsers, 10, false, lblRefreshTimer);
-                    }
+                    else
+                        refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", 20, false, lblRefreshTimer, bitVideoBrowser);
                 }
             }
             catch (Exception ex)
@@ -444,7 +481,7 @@ namespace SCTV
                 //Application.Restart();
             }
         }
-        
+
         private bool findQuickPick(HtmlDocument pageDocument)
         {
             if (!foundQuickPick)
@@ -498,12 +535,12 @@ namespace SCTV
                         return true;
                     }
                 }
-                
+
                 elc = pageDocument.GetElementsByTagName("input");
 
                 foreach (HtmlElement el in elc)
                 {
-                    if (el.GetAttribute("value") == "QUICK PICKS")
+                    if (el.GetAttribute("value") == "QUICK PICKS" || el.GetAttribute("value") == "USE QUICK PICKS")
                     {
                         refreshUtilities.ClickElement(el, true, lblRefreshTimer);
                         foundQuickPick = true;
@@ -585,6 +622,8 @@ namespace SCTV
                     numberOfPrizesEntered++;
                     txtPrizeCount.Text = numberOfPrizesEntered.ToString();
 
+                    log(statusLogPath, currentUser +" - Entered another contest " + numberOfPrizesEntered.ToString());
+
                     return true;
                 }
 
@@ -603,6 +642,8 @@ namespace SCTV
                     refreshCount = 0;
                     numberOfPrizesEntered++;
                     txtPrizeCount.Text = numberOfPrizesEntered.ToString();
+
+                    log(statusLogPath, currentUser + " - Entered another contest " + numberOfPrizesEntered.ToString());
 
                     return true;
                 }
@@ -667,7 +708,7 @@ namespace SCTV
 
 
             refreshUtilities.GoToURL("https://www.winloot.com", true, lblRefreshTimer, bitVideoBrowser);
-            
+
             foundSkip = true;
 
             return foundSkip;
@@ -678,12 +719,12 @@ namespace SCTV
             string tempUser = "";
             string tempPassword = "";
 
-            foreach(string user in users)
+            foreach (string user in users)
             {
                 tempUser = user.Split('|')[0];
                 tempPassword = user.Split('|')[1];
 
-                if(bitVideoBrowser.DocumentText.ToLower().Contains(tempUser.ToLower()))
+                if (bitVideoBrowser.DocumentText.ToLower().Contains(tempUser.ToLower()))
                 {
                     return tempUser;
                 }
@@ -699,6 +740,8 @@ namespace SCTV
             bool foundEmail = false;
             bool foundPassword = false;
             HtmlElement txtPassword = null;
+
+            log(statusLogPath, "Logging In "+ username);
 
             HtmlElementCollection elc = bitVideoBrowser.Document.GetElementsByTagName("input");
 
@@ -797,14 +840,14 @@ namespace SCTV
 
         private void logout()
         {
+            log(statusLogPath, "Logging Out "+ currentUser);
+
             currentUser = "";
             refreshUtilities.GoToURL("https://www.winloot.com/Home/Logout", 1, lblRefreshTimer, bitVideoBrowser);
         }
 
         private void initFormsConfigs()
         {
-            SettingsHelper helper = SettingsHelper.Current;
-
             checkForms = helper.CheckForms;
         }
 
@@ -854,7 +897,7 @@ namespace SCTV
                 //'if not, Set Emulation to highest level possible on the user machine
                 string Root = "HKEY_CURRENT_USER\\";
                 string Key = "Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION";
-                
+
                 object CurrentSetting = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(Key).GetValue(AppName + ".exe");
 
                 if (CurrentSetting == null || int.Parse(CurrentSetting.ToString()) != VersionCode)
@@ -865,7 +908,7 @@ namespace SCTV
             }
             catch (Exception ex)
             {
-                Tools.WriteToFile(Tools.errorFile, "useLatestIE error: "+ ex.Message + Environment.NewLine + ex.StackTrace);
+                Tools.WriteToFile(Tools.errorFile, "useLatestIE error: " + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -1374,6 +1417,9 @@ namespace SCTV
 
         public void log(string path, string content)
         {
+            //make sure the path exists
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             logHeader(path);
 
             File.AppendAllText(path, content);
@@ -1381,10 +1427,12 @@ namespace SCTV
 
         public void log(string path, string[] content)
         {
+            //make sure the path exists
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             logHeader(path);
 
             File.WriteAllLines(path, content);
-            //File.WriteAllText(path, content);
         }
 
         private void tcAdmin_VisibleChanged(object sender, EventArgs e)
@@ -1425,7 +1473,7 @@ namespace SCTV
             RegistryKey key = null;
             try
             {
-                key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command",true);
+                key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", true);
 
                 //trim off quotes
                 //browser = key.GetValue(null).ToString().Replace("\"", "");
@@ -1436,10 +1484,10 @@ namespace SCTV
                 //}
 
                 browser = key.GetValue(null).ToString();
-                
+
                 //key.SetValue(null, (string)@browser);
 
-                string safeSurfBrowser = "\""+ Application.ExecutablePath +"\"";
+                string safeSurfBrowser = "\"" + Application.ExecutablePath + "\"";
 
                 key.SetValue(null, (string)@safeSurfBrowser);
             }
@@ -1713,6 +1761,10 @@ namespace SCTV
             {
                 currentUser = "";
                 MessageBox.Show("All Done!!");
+
+                log(statusLogPath, "******** All Done!! *******");
+
+                log(finishedLogPath += "FINISHED_" + DateTime.Now.ToShortDateString().Replace("/", "") + "_" + DateTime.Now.ToShortTimeString().Replace(":", "") + ".txt", "******** All Done!! *******");
             }
 
             //}
@@ -1731,5 +1783,10 @@ namespace SCTV
             //    }
             //}
         }
+
+        //private void btnCheckForButton_Click(object sender, EventArgs e)
+        //{
+        //    tourBrowser.Navigate("javascript: window.external.CallServerSideCode();");
+        //}
     }
 }

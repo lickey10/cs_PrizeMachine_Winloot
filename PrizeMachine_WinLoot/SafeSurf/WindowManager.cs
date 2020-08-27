@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace SCTV
 {
@@ -20,11 +16,11 @@ namespace SCTV
 
         public bool ShowAddressBar
         {
-            set 
-            { 
+            set
+            {
                 showAddressBar = value;
 
-                if(ActiveBrowserControl != null)
+                if (ActiveBrowserControl != null)
                     ActiveBrowserControl.ShowAddressBar = value;
             }
 
@@ -131,10 +127,10 @@ namespace SCTV
             {
                 string error = ex.Message;
             }
-            
+
             return browserControl.WebBrowser;
         }
-        
+
         void WebBrowser_Quit(object sender, EventArgs e)
         {
             // This event is launched when window.close() is called from script
@@ -169,7 +165,7 @@ namespace SCTV
             {
                 string error = ex.Message;
             }
-            
+
         }
 
         #region Events that cause the status of toolbar buttons or menu items to change

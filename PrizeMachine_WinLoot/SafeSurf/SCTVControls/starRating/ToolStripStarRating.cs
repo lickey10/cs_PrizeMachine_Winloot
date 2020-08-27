@@ -2,27 +2,33 @@
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-namespace SCTV {
+namespace SCTV
+{
 
     [ToolStripItemDesignerAvailabilityAttribute(ToolStripItemDesignerAvailability.All)]
-    public class ToolStripStarRating : ToolStripControlHost {
+    public class ToolStripStarRating : ToolStripControlHost
+    {
 
         public ToolStripStarRating()
-            : base(new StarRating()) {
+            : base(new StarRating())
+        {
         }
 
-        public StarRating InnerControl {
+        public StarRating InnerControl
+        {
             get { return (StarRating)Control; }
         }
 
-        public int Rating {
+        public int Rating
+        {
             get { return InnerControl.Rating; }
             set { InnerControl.Rating = value; }
         }
 
         public event EventHandler<RatingChangedEventArgs> RatingChanged;
 
-        protected override void OnSubscribeControlEvents(Control c) {
+        protected override void OnSubscribeControlEvents(Control c)
+        {
 
             // Call the base so the base events are connected. 
             base.OnSubscribeControlEvents(c);
@@ -35,7 +41,8 @@ namespace SCTV {
 
         }
 
-        protected override void OnUnsubscribeControlEvents(Control c) {
+        protected override void OnUnsubscribeControlEvents(Control c)
+        {
             // Call the base method so the basic events are unsubscribed. 
             base.OnUnsubscribeControlEvents(c);
 
@@ -47,8 +54,10 @@ namespace SCTV {
 
         }
 
-        private void HandleRatingValueChanged(object sender, RatingChangedEventArgs e) {
-            if (RatingChanged != null) {
+        private void HandleRatingValueChanged(object sender, RatingChangedEventArgs e)
+        {
+            if (RatingChanged != null)
+            {
                 RatingChanged(this, e);
             }
         }

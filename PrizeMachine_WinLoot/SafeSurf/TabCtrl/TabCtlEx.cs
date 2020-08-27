@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Data;
-using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace SCTV
 {
@@ -100,7 +97,7 @@ namespace SCTV
                         using (LinearGradientBrush _Brush = new LinearGradientBrush(tabTextArea, SystemColors.Control, SystemColors.ControlLight, LinearGradientMode.Vertical))
                         {
                             ColorBlend _ColorBlend = new ColorBlend(3);
-                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight, 
+                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight,
                                                       Color.FromArgb(255,SystemColors.ControlLight),SystemColors.ControlDark,
                                                       SystemColors.ControlLightLight};
 
@@ -113,7 +110,7 @@ namespace SCTV
                                 e.Graphics.DrawPath(pen, _Path);
                             }
 
-                            _ColorBlend.Colors = new Color[]{  SystemColors.ActiveBorder, 
+                            _ColorBlend.Colors = new Color[]{  SystemColors.ActiveBorder,
                                                         SystemColors.ActiveBorder,SystemColors.ActiveBorder,
                                                         SystemColors.ActiveBorder};
 
@@ -154,7 +151,7 @@ namespace SCTV
                         using (LinearGradientBrush _Brush = new LinearGradientBrush(tabTextArea, SystemColors.Control, SystemColors.ControlLight, LinearGradientMode.Vertical))
                         {
                             ColorBlend _ColorBlend = new ColorBlend(3);
-                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight, 
+                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight,
                                                       Color.FromArgb(255,SystemColors.Control),SystemColors.ControlLight,
                                                       SystemColors.Control};
                             _ColorBlend.Positions = new float[] { 0f, .4f, 0.5f, 1f };
@@ -165,7 +162,7 @@ namespace SCTV
                                 e.Graphics.DrawPath(pen, _Path);
                             }
                             //Drawing Close Button
-                            _ColorBlend.Colors = new Color[]{Color.FromArgb(255,231,164,152), 
+                            _ColorBlend.Colors = new Color[]{Color.FromArgb(255,231,164,152),
                                                       Color.FromArgb(255,231,164,152),Color.FromArgb(255,197,98,79),
                                                       Color.FromArgb(255,197,98,79)};
                             _Brush.InterpolationColors = _ColorBlend;
@@ -179,12 +176,12 @@ namespace SCTV
                             if (CanDrawMenuButton(nIndex))
                             {
                                 //Drawing menu button
-                                _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight, 
+                                _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight,
                                                      Color.FromArgb(255,SystemColors.ControlLight),SystemColors.ControlDark,
                                                      SystemColors.ControlLightLight};
                                 _ColorBlend.Positions = new float[] { 0f, .4f, 0.5f, 1f };
                                 _Brush.InterpolationColors = _ColorBlend;
-                                _ColorBlend.Colors = new Color[]{Color.FromArgb(255,170,213,243), 
+                                _ColorBlend.Colors = new Color[]{Color.FromArgb(255,170,213,243),
                                                       Color.FromArgb(255,170,213,243),Color.FromArgb(255,44,137,191),
                                                       Color.FromArgb(255,44,137,191)};
                                 _Brush.InterpolationColors = _ColorBlend;
@@ -231,7 +228,7 @@ namespace SCTV
                     {
                         ColorBlend _ColorBlend = new ColorBlend(3);
 
-                        _ColorBlend.Colors = new Color[]{  SystemColors.ActiveBorder, 
+                        _ColorBlend.Colors = new Color[]{  SystemColors.ActiveBorder,
                                                         SystemColors.ActiveBorder,SystemColors.ActiveBorder,
                                                         SystemColors.ActiveBorder};
 
@@ -272,7 +269,7 @@ namespace SCTV
                         ColorBlend _ColorBlend = new ColorBlend(3);
                         _ColorBlend.Positions = new float[] { 0f, .4f, 0.5f, 1f };
 
-                        _ColorBlend.Colors = new Color[]{Color.FromArgb(255,231,164,152), 
+                        _ColorBlend.Colors = new Color[]{Color.FromArgb(255,231,164,152),
                                                       Color.FromArgb(255,231,164,152),Color.FromArgb(255,197,98,79),
                                                       Color.FromArgb(255,197,98,79)};
                         _Brush.InterpolationColors = _ColorBlend;
@@ -286,12 +283,12 @@ namespace SCTV
                         if (CanDrawMenuButton(nIndex))
                         {
                             //Drawing menu button
-                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight, 
+                            _ColorBlend.Colors = new Color[]{SystemColors.ControlLightLight,
                                                      Color.FromArgb(255,SystemColors.ControlLight),SystemColors.ControlDark,
                                                      SystemColors.ControlLightLight};
                             _ColorBlend.Positions = new float[] { 0f, .4f, 0.5f, 1f };
                             _Brush.InterpolationColors = _ColorBlend;
-                            _ColorBlend.Colors = new Color[]{Color.FromArgb(255,170,213,243), 
+                            _ColorBlend.Colors = new Color[]{Color.FromArgb(255,170,213,243),
                                                       Color.FromArgb(255,170,213,243),Color.FromArgb(255,44,137,191),
                                                       Color.FromArgb(255,44,137,191)};
                             _Brush.InterpolationColors = _ColorBlend;

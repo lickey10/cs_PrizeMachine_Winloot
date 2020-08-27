@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
+using System.Data;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -15,12 +11,12 @@ namespace SCTVObjects
         Media mediaToEdit = new Media();
         bool readOnly = false;
         MediaHandler myMedia = new MediaHandler();
-        
+
         public Media MediaToEdit
         {
             set
             {
-                mediaToEdit = value; 
+                mediaToEdit = value;
             }
 
             get
@@ -44,10 +40,10 @@ namespace SCTVObjects
 
         public bool AutoUpdate
         {
-            set 
-            { 
-                if(value)
-                    btnAutoUpdate_Click(btnAutoUpdate, null); 
+            set
+            {
+                if (value)
+                    btnAutoUpdate_Click(btnAutoUpdate, null);
             }
         }
 
@@ -63,7 +59,7 @@ namespace SCTVObjects
         public MediaDetails(Media media, DataView availableCategories, ArrayList availableMediaCategories)
         {
             InitializeComponent();
-            
+
             this.Refresh();
 
             MediaToEdit = media;
@@ -74,7 +70,7 @@ namespace SCTVObjects
         public MediaDetails(Media media)
         {
             InitializeComponent();
-            
+
             this.Refresh();
 
             MediaToEdit = media;
@@ -140,7 +136,7 @@ namespace SCTVObjects
 
                 //add available categories
                 foreach (string category in categories)
-                    if(!lbAvailableGenres.Items.Contains(category.Trim()))
+                    if (!lbAvailableGenres.Items.Contains(category.Trim()))
                         lbAvailableGenres.Items.Add(category.Trim());
 
                 foreach (string catString in availableMediaCategories)
@@ -174,7 +170,7 @@ namespace SCTVObjects
 
                 //add available mediaCategories
                 foreach (string category in mediaCategories)
-                    if(!lbAvailableCategories.Items.Contains(category.Trim()))
+                    if (!lbAvailableCategories.Items.Contains(category.Trim()))
                         lbAvailableCategories.Items.Add(category.Trim());
 
                 txtReleaseYearResult.Text = media.ReleaseYear;
@@ -183,7 +179,7 @@ namespace SCTVObjects
                 txtRatingResult.Text = media.Rating;
                 txtRatingReasonResult.Text = media.RatingDescription;
 
-                if(System.IO.File.Exists(media.coverImage))
+                if (System.IO.File.Exists(media.coverImage))
                     thumbnailPictureBox.ImageLocation = media.coverImage;
                 else
                     thumbnailPictureBox.ImageLocation = Application.StartupPath + "//images//media//coverimages//notavailable.jpg";
@@ -199,9 +195,9 @@ namespace SCTVObjects
                     filePaths[0] = media.filePath;
                 }
 
-                foreach(string filepath in filePaths)
+                foreach (string filepath in filePaths)
                 {
-                    if(!lbFiles.Items.Contains(filepath))
+                    if (!lbFiles.Items.Contains(filepath))
                         lbFiles.Items.Add(filepath.Trim());
                 }
 
@@ -269,9 +265,9 @@ namespace SCTVObjects
                     selectedMediaTypes += category.Trim();
             }
 
-            foreach(string filePath in lbFiles.Items)
+            foreach (string filePath in lbFiles.Items)
             {
-                if(filePath.Trim().Length > 0)
+                if (filePath.Trim().Length > 0)
                 {
                     if (tempFilePath.Trim().Length > 0)
                         tempFilePath += "|";
@@ -386,7 +382,7 @@ namespace SCTVObjects
                 else
                 {
                     IMDBScraper imdb = new IMDBScraper();
-                    
+
                     //search by title
                     foundMedia = imdb.getInfoByTitle(textToSearch, false, "");
                 }
@@ -395,7 +391,7 @@ namespace SCTVObjects
                 {
                     string tempFilePath = "";
 
-                    foreach(string filePath in lbFiles.Items)
+                    foreach (string filePath in lbFiles.Items)
                     {
                         if (tempFilePath.Trim().Length > 0)
                             tempFilePath += "|";
@@ -444,7 +440,7 @@ namespace SCTVObjects
 
             DialogResult result = addItem.ShowDialog(this);
 
-            if(result == DialogResult.Yes)
+            if (result == DialogResult.Yes)
                 lbCurrentGenres.Items.Add(addItem.ItemToAdd);
         }
 
@@ -456,14 +452,14 @@ namespace SCTVObjects
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtCoverImage.Text = "";
-            thumbnailPictureBox.ImageLocation = Application.StartupPath +"//images//media//coverimages//notavailable.jpg";
+            thumbnailPictureBox.ImageLocation = Application.StartupPath + "//images//media//coverimages//notavailable.jpg";
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog fdlg = new OpenFileDialog();
             fdlg.Title = "Cover Image";
-            fdlg.InitialDirectory = Application.StartupPath +"//images//media//coverimages//";
+            fdlg.InitialDirectory = Application.StartupPath + "//images//media//coverimages//";
             fdlg.Filter = "All files (*.*)|*.*|All files (*.*)|*.*";
             //fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
@@ -505,11 +501,11 @@ namespace SCTVObjects
 
             foreach (string item in lbFiles.Items)
             {
-                if(itemCounter == itemIndex)//this is the new home of our selected item
+                if (itemCounter == itemIndex)//this is the new home of our selected item
                 {
                     itemArray.Add(lbFiles.SelectedItem);
                 }
-                else if(itemCounter == lbFiles.SelectedIndex)
+                else if (itemCounter == lbFiles.SelectedIndex)
                 {
                     itemArray.Add(lbFiles.Items[itemIndex]);
                 }
@@ -521,7 +517,7 @@ namespace SCTVObjects
 
             lbFiles.Items.Clear();
 
-            foreach(string item in itemArray)
+            foreach (string item in itemArray)
                 lbFiles.Items.Add(item);
 
             lbFiles.SelectedIndex = itemIndex;

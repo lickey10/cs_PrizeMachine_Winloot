@@ -1,8 +1,6 @@
 using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace SCTV.ListView
 {
@@ -100,7 +98,7 @@ namespace SCTV.ListView
             this.scrollPositionOld = int.MinValue;
             this.scrollCommand = ScrollCommand.Down;
 
-          //  this.timer = new Timer() { Interval = this.MarqueeSpeed };
+            //  this.timer = new Timer() { Interval = this.MarqueeSpeed };
             this.timer.Tick += (sender, e) =>
             {
                 int scrollPosition = ListViewFF.GetScrollPos((IntPtr)this.Handle, (int)ScrollBarDirection.Horizontal);
@@ -143,7 +141,7 @@ namespace SCTV.ListView
                     //}
                     //else
                     //{
-                        this.scrollCommand = ScrollCommand.Up;
+                    this.scrollCommand = ScrollCommand.Up;
                     //}
                 }
                 this.scrollPositionOld = scrollPosition;
@@ -170,7 +168,7 @@ namespace SCTV.ListView
                 }
                 else
                 {
-                    if(this.timer != null)
+                    if (this.timer != null)
                         this.timer.Stop();
                 }
             }
@@ -234,5 +232,5 @@ namespace SCTV.ListView
 
         #endregion
     }
-	
+
 }

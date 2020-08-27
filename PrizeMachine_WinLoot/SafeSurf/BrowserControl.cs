@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
-using System.IO;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SCTV
 {
@@ -25,10 +20,10 @@ namespace SCTV
 
         public bool ShowAddressBar
         {
-            set 
+            set
             {
                 pnlAddress.Visible = value;
-                showAddress = value; 
+                showAddress = value;
             }
 
             get { return showAddress; }
@@ -52,7 +47,7 @@ namespace SCTV
 
             _browser.BringToFront();
             _browser.Visible = false;
-            
+
         }
 
         void _browser_DownloadComplete(object sender, EventArgs e)
@@ -65,7 +60,7 @@ namespace SCTV
 
                 //subscripe to the unload event
                 this.WebBrowser.Document.Window.Unload += new HtmlElementEventHandler(Window_Unload);
-//                this.WebBrowser.Document.Window.Document.Forms[0].InvokeMember;//????
+                //                this.WebBrowser.Document.Window.Document.Forms[0].InvokeMember;//????
 
                 UpdateAddressBox();
             }
@@ -80,7 +75,7 @@ namespace SCTV
         {
             // We got a script error, record it
             ScriptErrorManager.Instance.RegisterScriptError(e.Url, e.Description, e.LineNumber);
- 
+
             // Let the browser know we handled this error.
             e.Handled = true;
         }
@@ -100,9 +95,9 @@ namespace SCTV
             {
                 string urlString = "";
 
-                if(this.WebBrowser.Document != null)
+                if (this.WebBrowser.Document != null)
                     urlString = this.WebBrowser.Document.Url.ToString();
-                else if(this.WebBrowser.axIWebBrowser2 != null)
+                else if (this.WebBrowser.axIWebBrowser2 != null)
                     urlString = this.WebBrowser.axIWebBrowser2.LocationURL.ToString();
 
                 if (!urlString.Equals(this.addressTextBox.Text, StringComparison.InvariantCultureIgnoreCase))
@@ -165,7 +160,7 @@ namespace SCTV
         {
             if (mf.adminLock)
                 return false;
-            else if(!mf.MonitorActivity)
+            else if (!mf.MonitorActivity)
                 return true;
 
             string pageContents = _browser.DocumentText;
@@ -380,7 +375,7 @@ namespace SCTV
                 //display block
                 lblLoading.Text = "Site Blocked";
 
-                string[] content = new string[]{ this.addressTextBox.Text };
+                string[] content = new string[] { this.addressTextBox.Text };
 
                 if (mf == null)
                     mf = GetMainFormFromControl(this);
@@ -399,7 +394,7 @@ namespace SCTV
             }
 
             //reset loggedInTime since there is activity
-            if(mf == null)
+            if (mf == null)
                 mf = GetMainFormFromControl(this);
             mf.loggedInTime = 0;
         }

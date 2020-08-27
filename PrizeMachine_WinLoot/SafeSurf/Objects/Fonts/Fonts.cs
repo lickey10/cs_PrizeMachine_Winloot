@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing.Text;
-using System.Reflection;
-using System.IO;
 using System.Collections;
 using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
 
 namespace SCTVObjects
 {
@@ -19,7 +16,7 @@ namespace SCTVObjects
 
             foreach (string name in names)
             {
-                if(name.ToLower().Contains(".ttf"))
+                if (name.ToLower().Contains(".ttf"))
                     fonts.Add(name);
             }
 

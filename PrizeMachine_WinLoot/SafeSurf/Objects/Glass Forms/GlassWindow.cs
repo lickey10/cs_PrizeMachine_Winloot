@@ -1,9 +1,6 @@
-using System.Windows.Forms;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Text;
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace SCTVObjects
 {
@@ -19,7 +16,7 @@ namespace SCTVObjects
         bool displayMinimize = true;
         bool displayMaximize = true;
         bool displayClose = true;
-        
+
         public string Title
         {
             get { return title; }
@@ -95,14 +92,14 @@ namespace SCTVObjects
                 glass.formMinimizing += new Glass.FormMinimize(glass_formMinimizing);
 
                 glass.Show();
-                
+
                 this.TransparencyKey = System.Drawing.SystemColors.Control;
-                
+
             }
             catch (Exception ex)
             {
                 Tools.WriteToFile(ex);
-            }            
+            }
         }
 
         void glass_formMinimizing()

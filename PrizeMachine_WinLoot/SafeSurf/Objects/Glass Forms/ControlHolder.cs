@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace SCTVObjects
@@ -11,7 +7,7 @@ namespace SCTVObjects
     partial class ControlHolder : Form
     {
         Rectangle displayedRect;
-        
+
         public delegate void FormClose();
         public event FormClose closeForm;
 
@@ -69,7 +65,7 @@ namespace SCTVObjects
 
         private void ControlHolder_Load(object sender, EventArgs e)
         {
-            
+
 
         }
     }

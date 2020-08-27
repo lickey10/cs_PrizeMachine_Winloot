@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29123.88
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeSurf", "SafeSurf\SafeSurf.csproj", "{2BB5EE82-0735-40B7-B376-D5F6103C4B1B}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCTVControls", "SafeSurf\SC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCTVObjects", "SafeSurf\Objects\SCTVObjects.csproj", "{0F15BE7D-D1BE-4EA8-A57A-F9FA41AB4A4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshUtilities", "..\..\PrizeMachine_RefreshUtilities\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj", "{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshUtilities", "..\..\cs_PrizeMachine_RefreshUtilities\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj", "{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,8 +75,8 @@ Global
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Debug|x86.Build.0 = Debug|Any CPU
-		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|Any CPU.Build.0 = Publish|Any CPU
+		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|Any CPU.Build.0 = Release|Any CPU
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|x86.ActiveCfg = Publish|Any CPU
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Publish|x86.Build.0 = Publish|Any CPU
 		{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace SCTV
 {
@@ -15,8 +10,8 @@ namespace SCTV
 
         public bool Update
         {
-            set 
-            { 
+            set
+            {
                 update = value;
 
                 if (update)
@@ -40,7 +35,7 @@ namespace SCTV
                     this.DialogResult = DialogResult.None;
                     //TODO: log reason for admin lock
                 }
-                else if(!loginInfo[0].Contains("username:"))
+                else if (!loginInfo[0].Contains("username:"))
                 {
                     loginInfo = Encryption.Decrypt(loginInfo);
                 }
@@ -51,7 +46,7 @@ namespace SCTV
                     //TODO: log reason for admin lock
                 }
 
-                if (txtUserName.Text.Trim() == loginInfo[0].Replace("username:","") && txtPassword.Text.Trim() == loginInfo[1].Replace("password:",""))
+                if (txtUserName.Text.Trim() == loginInfo[0].Replace("username:", "") && txtPassword.Text.Trim() == loginInfo[1].Replace("password:", ""))
                 {
                     this.DialogResult = DialogResult.Yes;
                     lblError.Visible = false;
@@ -66,7 +61,7 @@ namespace SCTV
             }
             else
             {
-                string[] loginInfo = {"username:"+ txtUserName.Text.Trim(), "password:"+ txtPassword.Text.Trim()};
+                string[] loginInfo = { "username:" + txtUserName.Text.Trim(), "password:" + txtPassword.Text.Trim() };
                 loginInfo = Encryption.Encrypt(loginInfo);
                 File.WriteAllLines(MainForm.loginInfoPath, loginInfo);
                 this.Close();
@@ -75,7 +70,7 @@ namespace SCTV
 
         private void Login_Activated(object sender, EventArgs e)
         {
-            if(txtUserName.Text.Trim().Length == 0)
+            if (txtUserName.Text.Trim().Length == 0)
                 txtUserName.Focus();
         }
     }

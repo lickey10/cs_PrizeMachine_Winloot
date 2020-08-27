@@ -1,37 +1,36 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Windows.Forms;
 
 namespace SCTV
 {
-	/// <summary>
-	/// Summary description for splashScreen.
-	/// </summary>
-	public class SplashScreen2 : System.Windows.Forms.Form
+    /// <summary>
+    /// Summary description for splashScreen.
+    /// </summary>
+    public class SplashScreen2 : System.Windows.Forms.Form
     {
         private IContainer components;
-		protected Rectangle WorkAreaRectangle;
-		public string splashContent1="";
+        protected Rectangle WorkAreaRectangle;
+        public string splashContent1 = "";
         private ProgressBar pbLoading;
         private Timer loadingTimer;
         private PictureBox pictureBox1;
-        public string splashContent2="";
+        public string splashContent2 = "";
         Media mediaInfoToShow;
 
         public SplashScreen2()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
             loadingTimer.Enabled = true;
             loadingTimer.Start();
-		}
+        }
 
         public SplashScreen2(Media MediaInfoToShow)
         {
@@ -44,28 +43,28 @@ namespace SCTV
             loadingTimer.Start();
         }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             this.pbLoading = new System.Windows.Forms.ProgressBar();
             this.loadingTimer = new System.Windows.Forms.Timer(this.components);
@@ -119,34 +118,34 @@ namespace SCTV
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void splashScreen_VisibleChanged(object sender, System.EventArgs e)
-		{
-			if(this.Visible)
-			{
+        private void splashScreen_VisibleChanged(object sender, System.EventArgs e)
+        {
+            if (this.Visible)
+            {
                 Cursor.Position = new Point(this.Width, Cursor.Position.Y);
                 //Cursor.Hide();
                 //lblSCTV.Refresh();
                 //lblLoading.Refresh();
                 this.Focus();
                 this.BringToFront();
-			}
-			else
-			{
-				Cursor.Show();
-			}
-		}
+            }
+            else
+            {
+                Cursor.Show();
+            }
+        }
 
-		private void splashScreen_Load(object sender, System.EventArgs e)
-		{
+        private void splashScreen_Load(object sender, System.EventArgs e)
+        {
             WorkAreaRectangle = Screen.GetWorkingArea(WorkAreaRectangle);
             //lblSCTV.Top = (WorkAreaRectangle.Height-175)/2;
             //lblSCTV.Left = (WorkAreaRectangle.Width-lblSCTV.Width)/2;
-			
+
             this.Invalidate();
-		}
+        }
 
         private void loadingTimer_Tick(object sender, EventArgs e)
         {
@@ -264,5 +263,5 @@ namespace SCTV
             else
                 pictureBox1.Visible = false;
         }
-	}
+    }
 }

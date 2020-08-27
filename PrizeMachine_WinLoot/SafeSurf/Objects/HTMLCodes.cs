@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SCTVObjects
@@ -11,7 +10,7 @@ namespace SCTVObjects
         public readonly Dictionary<string, string> NumericCode = new Dictionary<string, string>();
         //const string HTML_TAG_PATTERN = "<.*?>";
         const string HTML_TAG_PATTERN = "<(.|\n)*?>";
-        
+
         public HTMLCodes()
         {
             Code.Add("&nbsp;", " ");

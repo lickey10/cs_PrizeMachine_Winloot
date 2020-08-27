@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace SCTVObjects
 {
@@ -30,7 +27,7 @@ namespace SCTVObjects
     {
         private delegate object RecurringTaskHandler();
         private delegate void RecurringTaskCompletedHandler(object state, DateTime timeStamp);
-        
+
         #region Private Fields
         protected const int ONE_SECOND = 1000;
         private System.Threading.Timer _timer = null;
@@ -38,17 +35,17 @@ namespace SCTVObjects
         private int _timeOut = 0;
         private object _syncLock = new object();
         private bool _stateProcessing = false;
-        private DateTime ? _lastUpdated = null;
+        private DateTime? _lastUpdated = null;
         #endregion
-        
+
         public event AsynTaskCompletedEventHandler Completed;
-        
+
         #region Constructors 
-        
+
         private AsynTask()
-        {   } 
-        
-        public AsynTask( int interval )
+        { }
+
+        public AsynTask(int interval)
         {
             _interval = interval;
         }
@@ -60,68 +57,68 @@ namespace SCTVObjects
         }
 
         #endregion
-        
+
         #region Properties
-                
+
         public int Interval
         {
-            get{ return _interval; }
+            get { return _interval; }
         }
-        
+
         public int Timeout
         {
-            get{ return _timeOut; }
+            get { return _timeOut; }
         }
-        
-        public DateTime ? LastUpdated
+
+        public DateTime? LastUpdated
         {
-            get{ return _lastUpdated; }
-            internal set{ _lastUpdated = value; }
+            get { return _lastUpdated; }
+            internal set { _lastUpdated = value; }
         }
         #endregion
-             
+
         public void Start()
         {
             int timeInterval = this.Interval * ONE_SECOND;
-            _timer = new System.Threading.Timer( OnTimer, null, 0, timeInterval );  
+            _timer = new System.Threading.Timer(OnTimer, null, 0, timeInterval);
         }
         public void Kill()
         {
-            if( !_stateProcessing )
+            if (!_stateProcessing)
             {
                 _timer.Dispose();
-                return;    
-            } 
+                return;
+            }
         }
-        private void OnTimer( object state )
+        private void OnTimer(object state)
         {
-            int threadId = Thread.CurrentThread.ManagedThreadId;          
-            if( _stateProcessing )
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            if (_stateProcessing)
             {
                 //Tools.WriteToFile(Tools.errorFile, "OnTimer() - Still Processing, Thread Id: {0}.", threadId );
                 return;
             }
-            lock( _syncLock )
+            lock (_syncLock)
             {
-                if( !_stateProcessing )
+                if (!_stateProcessing)
                 {
                     _stateProcessing = true;
-                    RecurringTaskHandler recurringTaskHandler = new RecurringTaskHandler( OnRecurringTask );
-                    IAsyncResult asyncResult = recurringTaskHandler.BeginInvoke( null, null );
-                    int timeOut = this.Timeout * ONE_SECOND; 
-                    if( asyncResult.AsyncWaitHandle.WaitOne( timeOut, false ) )
+                    RecurringTaskHandler recurringTaskHandler = new RecurringTaskHandler(OnRecurringTask);
+                    IAsyncResult asyncResult = recurringTaskHandler.BeginInvoke(null, null);
+                    int timeOut = this.Timeout * ONE_SECOND;
+                    if (asyncResult.AsyncWaitHandle.WaitOne(timeOut, false))
                     {
-                        this.LastUpdated = DateTime.Now;                
-                        object result = recurringTaskHandler.EndInvoke( asyncResult );
-                        RecurringTaskCompletedHandler recurringTaskCompletedHandler = new RecurringTaskCompletedHandler( OnRecurringTaskCompleted );
-                        recurringTaskCompletedHandler.BeginInvoke( result, this.LastUpdated.Value, null, null );
-                    }                   
-                    _stateProcessing = false;                    
+                        this.LastUpdated = DateTime.Now;
+                        object result = recurringTaskHandler.EndInvoke(asyncResult);
+                        RecurringTaskCompletedHandler recurringTaskCompletedHandler = new RecurringTaskCompletedHandler(OnRecurringTaskCompleted);
+                        recurringTaskCompletedHandler.BeginInvoke(result, this.LastUpdated.Value, null, null);
+                    }
+                    _stateProcessing = false;
                 }
                 else
                     return;
-            }            
-        }        
+            }
+        }
         protected virtual object OnRecurringTask()
         {
             object state = null;
@@ -129,53 +126,53 @@ namespace SCTVObjects
             {
                 state = RecurringTask();
             }
-            catch( SystemException e )
+            catch (SystemException e)
             {
                 throw e;
             }
-            catch( Exception e )
+            catch (Exception e)
             {
                 Debug.Write(e.Message.ToString());
             }
-            return state;        
+            return state;
         }
         protected virtual void OnRecurringTaskCompleted(object state, DateTime timeStamp)
         {
             try
-            {            
-                RecurringTaskCompleted( state );
-                DateTime lastUpdated = this.LastUpdated ?? DateTime.MinValue;                
-                if( timeStamp >= lastUpdated )
-                    ThreadSync.InvokeDelegate(Completed, this, new AsynTaskCompletedEventArgs( state, lastUpdated ));                                               
+            {
+                RecurringTaskCompleted(state);
+                DateTime lastUpdated = this.LastUpdated ?? DateTime.MinValue;
+                if (timeStamp >= lastUpdated)
+                    ThreadSync.InvokeDelegate(Completed, this, new AsynTaskCompletedEventArgs(state, lastUpdated));
             }
-            catch( SystemException e )
+            catch (SystemException e)
             {
                 throw e;
             }
-            catch( Exception e )
+            catch (Exception e)
             {
                 Debug.Write(e.Message.ToString());
-            }        
-        }       
+            }
+        }
         public abstract object RecurringTask();
-        public abstract void RecurringTaskCompleted( object state );
+        public abstract void RecurringTaskCompleted(object state);
         public void Dispose()
         {
-            Kill();    
+            Kill();
         }
 
     }
-    
+
     #region Event Args & Delegates
-    
-    public delegate void AsynTaskCompletedEventHandler( object sender, AsynTaskCompletedEventArgs e );
-    
+
+    public delegate void AsynTaskCompletedEventHandler(object sender, AsynTaskCompletedEventArgs e);
+
     public class AsynTaskCompletedEventArgs : EventArgs
     {
         private readonly object _result;
         private readonly DateTime _lastUpdated;
         private AsynTaskCompletedEventArgs() : base()
-        {   }
+        { }
 
         public AsynTaskCompletedEventArgs(object result, DateTime lastUpdated)
             : this()
@@ -183,10 +180,10 @@ namespace SCTVObjects
             _result = result;
             _lastUpdated = lastUpdated;
         }
-        
+
         public object Result
         {
-            get{ return _result; }
+            get { return _result; }
         }
 
         public DateTime LastUpdated
@@ -195,7 +192,7 @@ namespace SCTVObjects
         }
 
     }
-    
+
     #endregion
 
 
@@ -240,9 +237,9 @@ namespace SCTVObjects
 
                 throw;
             }
-            
+
         }
-        
+
         public override object RecurringTask()
         {
             object[] state = new object[] { "success!" };
