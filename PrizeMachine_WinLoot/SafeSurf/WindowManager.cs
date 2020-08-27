@@ -349,7 +349,7 @@ namespace SCTV
             {
                 try
                 {
-                    if (_tabControl != null && _tabControl.SelectedIndex >= 0)
+                    if (_tabControl != null && _tabControl.SelectedIndex > 0)
                     {
                         TabPageEx page = (TabPageEx)_tabControl.SelectedTab;
                         if (page != null)

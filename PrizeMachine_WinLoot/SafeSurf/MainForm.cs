@@ -408,6 +408,19 @@ namespace SCTV
                                 }
                             }
                         }
+
+                        //check for play now button
+                        if (!loggingIn)
+                        {
+                            //look for join button
+                            string joinButton = findValue(bitVideoBrowser.DocumentText, "<div class=\"ucase JoinButton\" style=\"padding-left:20px;padding-right:20px;", "</div>");
+
+                            if (joinButton.Contains("Play Now!</a>"))
+                            {
+                                string playNowLink = findValue(joinButton, "<a href=\"", "\">Play Now!</a>");
+                                refreshUtilities.GoToURL(bitVideoBrowser.Url.Host + playNowLink, lblRefreshTimer, bitVideoBrowser);
+                            }
+                        }
                     }
                     else if (bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/sweepstake") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/5k_sweepstakes"))
                     {
@@ -768,6 +781,16 @@ namespace SCTV
 
                     break;
                 }
+
+                if (!foundEmail && el.OuterHtml.ToLower().Contains("id=\"new_landing_email\"")) //check for the new email field
+                {
+                    //<input id="new_landing_email" class="form-control input-lg xverify_email" value="" type="text" style="color:black" placeholder="Type Your Email Here...">
+                    el.SetAttribute("value", username);
+
+                    foundEmail = true;
+
+                    break;
+                }
             }
 
             if (foundEmail && foundPassword)
@@ -806,36 +829,26 @@ namespace SCTV
                     }
                 }
             }
+            else if(foundEmail)
+            {
+                elc = bitVideoBrowser.Document.GetElementsByTagName("button");
 
-            ////find password
-            //foreach (HtmlElement el in elc)
-            //{
-            //    //<input placeholder="Password" type="password" class="form-control form-group-sm" name="password" tabindex="2">
-            //    if (el.OuterHtml.ToLower().Contains("tabindex=\"2\""))//this is the password field
-            //    {
-            //        //el.SetAttribute("text", password);
-            //        el.SetAttribute("value", password);
+                foreach (HtmlElement el in elc)
+                {
+                    //<button type="button" value="" class="text-center" id="regSubmit">YES, I WANT TO WIN</button>
+                    if (el.OuterHtml.Contains("id=\"regSubmit\""))
+                    {
+                        //click the button
 
-            //        foundPassword = true;
+                        loggingIn = true;
+                        refreshUtilities.ClickElement(el, 3, true, lblRefreshTimer);
 
-            //        break;
-            //    }
-            //}
+                        currentUser = username + "|" + password;
 
-            //find login
-            //if (foundEmail && foundPassword)
-            //{
-            //    foreach (HtmlElement el in elc)
-            //    {
-            //        //<input type="submit" class="WLButton ucase btn btn-success form-control loginbtn" value="Login" tabindex="3">
-            //        if (el.GetAttribute("type").ToLower() == "submit" && el.OuterHtml.ToLower().Contains("value=\"login\""))//this is the login button
-            //        {
-            //            refreshUtilities.ClickElement(el, 1, lblRefreshTimer);
-
-            //            break;
-            //        }
-            //    }
-            //}
+                        break;
+                    }
+                }
+            }
         }
 
         private void logout()
