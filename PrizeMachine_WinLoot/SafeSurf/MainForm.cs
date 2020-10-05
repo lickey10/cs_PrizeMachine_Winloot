@@ -422,7 +422,7 @@ namespace SCTV
                             }
                         }
                     }
-                    else if (bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/sweepstake") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/5k_sweepstakes"))
+                    else if (bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/sweepstake") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/5k_sweepstakes") || bitVideoBrowser.Url.ToString().ToLower().Contains("://www.winloot.com/bonusgame"))
                     {
                         foundOffsiteURL = false;
                         loggingIn = false;
