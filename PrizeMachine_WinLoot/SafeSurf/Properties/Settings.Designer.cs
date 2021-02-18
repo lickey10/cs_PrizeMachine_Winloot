@@ -38,9 +38,9 @@ namespace SCTV.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Low")]
-        public global::PrizeMachine_Swagbucks.PopupBlockerFilterLevel FilterLevel {
+        public global::SCTV.PopupBlockerFilterLevel FilterLevel {
             get {
-                return ((global::PrizeMachine_Swagbucks.PopupBlockerFilterLevel)(this["FilterLevel"]));
+                return ((global::SCTV.PopupBlockerFilterLevel)(this["FilterLevel"]));
             }
             set {
                 this["FilterLevel"] = value;

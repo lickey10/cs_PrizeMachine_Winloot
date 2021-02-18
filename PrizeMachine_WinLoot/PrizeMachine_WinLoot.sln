@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCTVControls", "SafeSurf\SC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCTVObjects", "SafeSurf\Objects\SCTVObjects.csproj", "{0F15BE7D-D1BE-4EA8-A57A-F9FA41AB4A4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshUtilities", "..\..\cs_PrizeMachine_RefreshUtilities\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj", "{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefreshUtilities", "..\..\PrizeMachine_RefreshUtilities\PrizeMachine_RefreshUtilities\RefreshUtilities\RefreshUtilities.csproj", "{3C105E9A-6ED6-4404-9D19-C31D0C5DA563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
