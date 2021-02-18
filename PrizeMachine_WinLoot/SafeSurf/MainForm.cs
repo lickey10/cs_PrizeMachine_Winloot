@@ -216,8 +216,10 @@ namespace SCTV
 
                 initFormsConfigs();
 
-                users.Add("lickey10@gmail.com|soccer");
-                users.Add("lickeykids@gmail.com|soccer");
+                string allUsers = Properties.Settings.Default.users;
+
+                foreach (string user in allUsers.Split(','))
+                    users.Add(user);
 
                 //getDefaultBrowser();
 
@@ -277,6 +279,12 @@ namespace SCTV
                 if (tempBrowser.IsBusy)
                     tempBrowser.Stop();
 
+                //if(((RefreshUtilities.TimerInfo)sender).UrlToGoTo.ToLower().Contains("/bonusgame/"))
+                //{
+                    foundQuickPick = false;
+                    foundNewContest = false;
+                //}
+
                 tempBrowser.Url = new Uri(((RefreshUtilities.TimerInfo)sender).UrlToGoTo);
             }
         }
@@ -298,21 +306,27 @@ namespace SCTV
                                 || ((HtmlElement)sender).OuterHtml.Contains("img-responsive prev-on") || ((HtmlElement)sender).GetAttribute("href") == "javascript:useFavorites()"
                                 || ((HtmlElement)sender).OuterHtml.Contains("userFavorites()") || ((HtmlElement)sender).GetAttribute("href") == "javascript:quickPicks()"))//this is the quick pick button - now click the submit button
                 {
-                    findSubmit(bitVideoBrowser.Document);
+                    if(findSubmit(bitVideoBrowser.Document))
+                    {
+                        //foundQuickPick = false;
+                        //foundNewContest = false;
+                    }
                         //refreshUtilities.CallMethod("javascript:useFavorites()", true, lblRefreshTimer);
                 }
 
-                if (((HtmlElement)sender).GetAttribute("src").Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
+                if (((HtmlElement)sender).GetAttribute("src").ToLower().Contains("/images/bonusgame/button_bonusgame_autopick_on.png"))
                 {
                     if (!findSkipAndContinue())
                     {
                         foundQuickPick = false;
+                        foundNewContest = false;
                         refreshUtilities.GoToURL("http://www.winloot.com/Sweepstake", true, lblRefreshTimer, bitVideoBrowser);
                     }
                 }
                 else if (!loggingIn)
                 {
-                    foundQuickPick = false;
+                    //foundQuickPick = false;
+                    foundNewContest = false;
                     refreshUtilities.GoToURL("http://www.winloot.com/", 19, lblRefreshTimer, bitVideoBrowser);
                 }
             }
@@ -385,6 +399,7 @@ namespace SCTV
                     {
                         foundQuickPick = false;
                         foundOffsiteURL = true;
+                        foundNewContest = false;
 
                         //if (bitVideoBrowser.Url.Host.ToLower() == "offers.winloot.com" || bitVideoBrowser.Url.Host.ToLower() == "entries.winloot.com")
                         //    findSkipAndContinue();
@@ -481,7 +496,7 @@ namespace SCTV
                             foundOffsiteURL = false;
                             foundQuickPick = false;
 
-                            findNextContestLink(bitVideoBrowser.DocumentText);
+                            foundNewContest = findNextContestLink(bitVideoBrowser.DocumentText);
                         }
                     }
                     else
@@ -549,11 +564,12 @@ namespace SCTV
                     }
                 }
 
-                elc = pageDocument.GetElementsByTagName("input");
+                //<img src="//static.winloot.com/images/spacer.gif" class="img-responsive">
+                elc = pageDocument.GetElementsByTagName("a");
 
                 foreach (HtmlElement el in elc)
                 {
-                    if (el.GetAttribute("value") == "QUICK PICKS" || el.GetAttribute("value") == "USE QUICK PICKS")
+                    if (el.GetAttribute("href") == "javascript:quickPicks()" || (el.OuterHtml != null && el.OuterHtml.ToLower().Contains("onclick=\"userfavorites()\"") && !el.OuterHtml.ToLower().Contains(" disable")) && !el.Parent.OuterHtml.Contains(" disable "))
                     {
                         refreshUtilities.ClickElement(el, true, lblRefreshTimer);
                         foundQuickPick = true;
@@ -563,12 +579,11 @@ namespace SCTV
                     }
                 }
 
-                //<img src="//static.winloot.com/images/spacer.gif" class="img-responsive">
-                elc = pageDocument.GetElementsByTagName("a");
+                elc = pageDocument.GetElementsByTagName("input");
 
                 foreach (HtmlElement el in elc)
                 {
-                    if (el.GetAttribute("href") == "javascript:quickPicks()" || (el.OuterHtml != null && el.OuterHtml.ToLower().Contains("onclick=\"userfavorites()\"") && !el.OuterHtml.ToLower().Contains(" disable")))
+                    if (el.GetAttribute("value") == "QUICK PICKS" || el.GetAttribute("value") == "USE QUICK PICKS" && (el.OuterHtml.IndexOf("type=\"button\"") < el.OuterHtml.IndexOf("class=\"btn btn - ")))
                     {
                         refreshUtilities.ClickElement(el, true, lblRefreshTimer);
                         foundQuickPick = true;
@@ -667,20 +682,30 @@ namespace SCTV
 
         private bool findNextContestLink(string pageContent)
         {
-            foundQuickPick = false;
+            //foundQuickPick = false;
             foundSubmit = false;
             //string nextContestLink = findValue(pageContent, "window.location='/DailyDraw/Index", "'");
             string nextContestLink = findValue(pageContent, "window.location='/", "'");
 
             if (nextContestLink.ToLower().Contains("/blog/"))
+            {
                 foundQuickPick = true;
+                foundNewContest = false;
+            }
 
-            if (nextContestLink.Trim().Length == 0)
+            if (nextContestLink.Trim().Length == 0 && !foundQuickPick)
             {
                 nextContestLink = findValue(pageContent, "/Sweepstake/Index", "\"");
 
                 if (nextContestLink.Trim().Length == 0)
-                    nextContestLink = "Sweepstake/Index" + nextContestLink;
+                {
+                    foundQuickPick = findQuickPick(bitVideoBrowser.Document);
+
+                    if (!foundQuickPick)
+                        nextContestLink = "Sweepstake/Index" + nextContestLink;
+                    else
+                        return true;
+                }
             }
 
             if (nextContestLink.Trim().Length > 0)
@@ -695,6 +720,7 @@ namespace SCTV
             }
             else //we are done - switch users
                 btnSwitchUsers.PerformClick();
+
 
             return false;
         }
